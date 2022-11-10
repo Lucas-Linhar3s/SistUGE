@@ -43,10 +43,10 @@ class IProdutosRepo {
     return result;
   }
 
-  // int deleteProduct(int id) {
-  //   PreparedStatement delete = _db.prepare('DELETE FROM produtos WHERE id=?');
-  //   delete.execute([id]);
-  //   final query = _db.getUpdatedRows();
-  //   return query;
-  // }
+  int deleteProduto(int id) {
+    PreparedStatement delete = _db.prepare('DELETE FROM produtos WHERE id=?');
+    delete.execute([id]);
+    final query = _db.getUpdatedRows();
+    return query;
+  }
 }

@@ -15,6 +15,7 @@ class IProdutoController extends Resource {
         Route.post('/produtos', _criarProduto),
         Route.get('/produtos', _buscarProdutos),
         Route.put('/produtos/:id', _atualizarProduto),
+        Route.delete('/produtos/:id', _deleteProduto),
       ];
 
   Future<Response> _criarProduto(ModularArguments req) async {
@@ -43,9 +44,7 @@ class IProdutoController extends Resource {
     );
     final result = _repository.buscarProdutos(params);
     if (result.isEmpty == false) {
-      final map = {
-        'Produtos': result
-      };
+      final map = {'Produtos': result};
       return Response(200, body: jsonEncode(map));
     }
     final map = {
@@ -86,14 +85,18 @@ class IProdutoController extends Resource {
     return Response(400, body: jsonEncode(map));
   }
 
-  // Future<Response> _deleteProduct(ModularArguments req) async {
-  //   final id = int.parse(req.params['id']);
-  //   final result = _repository.deleteProduct(id);
-  //   if (result != 0) {
-  //     final map = {'sucesso': 'Produto com id: $id foi excluido com sucesso'};
-  //     return Response(200, body: jsonEncode(map), headers: _jsonEncode);
-  //   }
-  //   final map = {'error': 'erro ao tentar excluir produto com id: $id!'};
-  //   return Response(404, body: jsonEncode(map), headers: _jsonEncode);
-  // }
+  Future<Response> _deleteProduto(ModularArguments req) async {
+    final id = int.parse(req.params['id']);
+    final result = _repository.deleteProduto(id);
+    if (result != 0) {
+      final map = {
+        'Sucesso': ['Produto com id: $id foi excluido com sucesso']
+      };
+      return Response(200, body: jsonEncode(map));
+    }
+    final map = {
+      'Error': ['erro ao tentar excluir produto com id: $id!']
+    };
+    return Response(404, body: jsonEncode(map));
+  }
 }
