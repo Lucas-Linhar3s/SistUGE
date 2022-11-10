@@ -13,14 +13,15 @@ class IProdutoController extends Resource {
   @override
   List<Route> get routes => [
         Route.post('/produtos', _criarProduto),
-        Route.get('/produtos', _buscarProdutos)
+        Route.get('/produtos', _buscarProdutos),
+        Route.put('/produtos/:id', _atualizarProduto),
       ];
 
   Future<Response> _criarProduto(ModularArguments req) async {
     ModelProdutos produtos = ModelProdutos(
-      req.data['nome'],
-      req.data['dt_ult_compra'],
-      req.data['ult_preco'],
+      nome: req.data['nome'],
+      dt_ult_compra: req.data['dt_ult_compra'],
+      ult_preco: req.data['ult_preco'],
     );
     int result = _repository.criarProdutos(produtos);
     if (result != 0) {
@@ -43,7 +44,7 @@ class IProdutoController extends Resource {
     final result = _repository.buscarProdutos(params);
     if (result.isEmpty == false) {
       final map = {
-        'Produtos': [result]
+        'Produtos': result
       };
       return Response(200, body: jsonEncode(map));
     }
@@ -65,26 +66,25 @@ class IProdutoController extends Resource {
   //   return Response(404, body: jsonEncode(map), headers: _jsonEncode);
   // }
 
-  // Future<Response> _putProduct(ModularArguments req) async {
-  //   ModelProducts products = ModelProducts(
-  //     id: int.parse(req.params['id']),
-  //     nome: req.data['nome'],
-  //     dt_ult_compra: req.data['dt_ult_compra'],
-  //     ult_preco: req.data['ult_preco'],
-  //   );
-  //   final result = _repository.putProduct(products);
-  //   if (result != 0) {
-  //     final map = {
-  //       'message': 'Produto com id: ${products.id} foi atualizado com sucesso!'
-  //     };
-  //     return Response(200, body: jsonEncode(map), headers: _jsonEncode);
-  //   } else {
-  //     final map = {
-  //       'message': 'Erro ao tentar atualizar produto com id: ${products.id}!'
-  //     };
-  //     return Response(500, body: jsonEncode(map), headers: _jsonEncode);
-  //   }
-  // }
+  Future<Response> _atualizarProduto(ModularArguments req) async {
+    ModelProdutos produto = ModelProdutos(
+      id: int.parse(req.params['id']),
+      nome: req.data['nome'],
+      dt_ult_compra: req.data['dt_ult_compra'],
+      ult_preco: req.data['ult_preco'],
+    );
+    int result = _repository.atualizarProduto(produto);
+    if (result != 0) {
+      final map = {
+        'Sucesso': ['Produto com id: ${produto.id} foi atualizado com sucesso!']
+      };
+      return Response(200, body: jsonEncode(map));
+    }
+    final map = {
+      'Error': ['erro ao tentar atualizar produto com id: ${produto.id}!']
+    };
+    return Response(400, body: jsonEncode(map));
+  }
 
   // Future<Response> _deleteProduct(ModularArguments req) async {
   //   final id = int.parse(req.params['id']);

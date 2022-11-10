@@ -29,19 +29,19 @@ class IProdutosRepo {
     return query;
   }
 
-  // int putProduct(ModelProducts products) {
-  //   PreparedStatement query = _db.prepare(
-  //       'UPDATE produtos SET nome=?, dt_ult_compra=?, ult_preco=? WHERE id=?');
-  //   query.execute([
-  //     products.nome,
-  //     products.dt_ult_compra,
-  //     products.ult_preco,
-  //     products.id,
-  //   ]);
-  //   final result = _db.getUpdatedRows();
-  //   query.dispose();
-  //   return result;
-  // }
+  int atualizarProduto(ModelProdutos produtos) {
+    PreparedStatement query = _db.prepare(
+        'UPDATE produtos SET nome=?, dt_ult_compra=?, ult_preco=? WHERE id=?');
+    query.execute([
+      produtos.nome,
+      produtos.dt_ult_compra,
+      produtos.ult_preco,
+      produtos.id,
+    ]);
+    final result = _db.getUpdatedRows();
+    query.dispose();
+    return result;
+  }
 
   // int deleteProduct(int id) {
   //   PreparedStatement delete = _db.prepare('DELETE FROM produtos WHERE id=?');
