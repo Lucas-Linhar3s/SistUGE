@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:backend/src/Interfaces/Produtos/repository/produtoRepository.dart';
 import 'package:backend/src/Interfaces/Produtos/viewModels/modelProdutos.dart';
+import 'package:backend/src/Interfaces/Produtos/viewModels/queryParams.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_modular/shelf_modular.dart';
 
@@ -12,6 +13,7 @@ class IProdutoController extends Resource {
   @override
   List<Route> get routes => [
         Route.post('/produtos', _criarProduto),
+        Route.get('/produtos', _buscarProdutos)
       ];
 
   Future<Response> _criarProduto(ModularArguments req) async {
@@ -33,17 +35,23 @@ class IProdutoController extends Resource {
     return Response(500, body: jsonEncode(map));
   }
 
-  // Future<Response> _getAllProducts(ModularArguments req) async {
-  //   QueryParams parameter = QueryParams(
-  //       offset: int.parse(req.queryParams['offset'].toString()),
-  //       pageSize: int.parse(req.queryParams['pageSize'].toString()));
-  //   final result = _repository.getAllProduct(parameter);
-  //   if (result.isEmpty == false) {
-  //     return Response(200, body: jsonEncode(result), headers: _jsonEncode);
-  //   }
-  //   final map = {'error': "Error ao buscar produtos"};
-  //   return Response(404, body: jsonEncode(map), headers: _jsonEncode);
-  // }
+  Future<Response> _buscarProdutos(ModularArguments req) async {
+    Params params = Params(
+      int.parse(req.queryParams['pageSize'].toString()),
+      int.parse(req.queryParams['offset'].toString()),
+    );
+    final result = _repository.buscarProdutos(params);
+    if (result.isEmpty == false) {
+      final map = {
+        'Produtos': [result]
+      };
+      return Response(200, body: jsonEncode(map));
+    }
+    final map = {
+      'Error': ["error ao buscar produtos"]
+    };
+    return Response(404, body: jsonEncode(map));
+  }
 
   // Future<Response> _getOneProduct(ModularArguments req) async {
   //   int id = int.parse(req.params['id']);

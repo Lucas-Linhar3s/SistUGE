@@ -1,4 +1,5 @@
 import 'package:backend/src/Interfaces/Produtos/viewModels/modelProdutos.dart';
+import 'package:backend/src/Interfaces/Produtos/viewModels/queryParams.dart';
 import 'package:backend/src/Services/Database/sqlite.dart';
 import 'package:sqlite3/sqlite3.dart';
 
@@ -9,11 +10,7 @@ class IProdutosRepo {
     PreparedStatement query = _db.prepare(
         'INSERT INTO produtos(nome,dt_ult_compra,ult_preco) VALUES(?,?,?);');
 
-    query.execute([
-      produtos.nome,
-      produtos.dt_ult_compra,
-      produtos.ult_preco,
-    ]);
+    query.execute([produtos.nome, produtos.dt_ult_compra, produtos.ult_preco]);
     final lastID = _db.lastInsertRowId;
     query.dispose();
     return lastID;
@@ -25,16 +22,12 @@ class IProdutosRepo {
   //   return query;
   // }
 
-  // ResultSet getAllProduct(QueryParams parameter) {
-  //   ResultSet query = _db.select('''
-  //     SELECT
-  // 		  *
-  // 	FROM produtos
-  //    ORDER BY id
-  // 	LIMIT ? OFFSET ?;
-  //     ''', [parameter.pageSize, parameter.offset]);
-  //   return query;
-  // }
+  ResultSet buscarProdutos(Params params) {
+    ResultSet query = _db.select(
+        'SELECT * FROM produtos ORDER BY id LIMIT ? OFFSET ?;',
+        [params.limite, params.offset]);
+    return query;
+  }
 
   // int putProduct(ModelProducts products) {
   //   PreparedStatement query = _db.prepare(
