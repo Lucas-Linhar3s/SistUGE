@@ -1,7 +1,3 @@
-import 'package:backend/src/Interfaces/Produtos/repository/produtoRepository.dart';
-import 'package:backend/src/Interfaces/Produtos/viewModels/modelProdutos.dart';
-import 'package:backend/src/Interfaces/Produtos/viewModels/queryParams.dart';
-import 'package:backend/src/Services/Database/sqlite.dart';
 import 'package:backend/src/Services/Router/router.dart';
 
 void main(List<String> args) {
