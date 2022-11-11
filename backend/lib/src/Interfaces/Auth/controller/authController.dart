@@ -14,10 +14,10 @@ ConfigBCrypt _bcrypt = ConfigBCrypt();
 class AuthController extends Resource {
   @override
   List<Route> get routes => [
-        Route.post('/auth/login', _login),
+        Route.post('/auth/login', login),
       ];
 
-  Response _login(ModularArguments req) {
+  Response login(ModularArguments req) {
     LoginModel login = LoginModel.fromRequest(data: req.data);
     ResultSet result = _repository.login(login);
     if (result.isEmpty == false) {
