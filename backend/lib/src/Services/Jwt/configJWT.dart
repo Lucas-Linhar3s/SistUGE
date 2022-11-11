@@ -12,4 +12,19 @@ class configJwt {
   verifyToken({required String token, required String audiance}) {
     JWT.verify(token, SecretKey(key), audience: Audience.one(audiance));
   }
+
+
+Map<String, dynamic> acessTokenClaims(Map<String, dynamic> json) {
+  final dateIn = DateTime.now().add(Duration(milliseconds: 60));
+  final exp = Duration(milliseconds: dateIn.millisecondsSinceEpoch).inSeconds;
+  final claims = {"id": json['id'], "nome": json["nome"], "exp": exp};
+  return claims;
+}
+
+Map<String, dynamic> refreshTokenClaims(Map<String, dynamic> json) {
+  final dateIn = DateTime.now().add(Duration(days: 3));
+  final exp = Duration(milliseconds: dateIn.millisecondsSinceEpoch).inSeconds;
+  final claims = {"id": json['id'], "nome": json["nome"], "exp": exp};
+  return claims;
+}
 }

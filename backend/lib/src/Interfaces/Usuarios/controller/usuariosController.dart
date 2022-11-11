@@ -18,20 +18,26 @@ class IUsuarioController extends Resource {
       ];
 
   Future<Response> _criarUsuarios(ModularArguments req) async {
-    ModelUsuarios usuarios = ModelUsuarios(
-        nome: req.data['nome'],
-        email: req.data['email'],
-        senha: _BCrypt.generateBCrypt(password: req.data['senha']),
-        isAdmin: req.data['isAdmin']);
-    final result = _repository.criarUsuario(usuarios);
-    if (result != 0) {
-      final map = {
-        'Sucesso': ['Usuario criado com sucesso! id: $result']
-      };
-      return Response(201, body: jsonEncode(map));
+    final email = req.data['email'];
+    final bool emailIsValid = RegExp(
+            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+        .hasMatch(email);
+    if (emailIsValid) {
+      ModelUsuarios usuarios = ModelUsuarios(
+          nome: req.data['nome'],
+          email: email,
+          senha: _BCrypt.generateBCrypt(password: req.data['senha']),
+          isAdmin: req.data['isAdmin']);
+      final result = _repository.criarUsuario(usuarios);
+      if (result != 0) {
+        final map = {
+          'Sucesso': ['Usuario criado com sucesso! id: $result']
+        };
+        return Response(201, body: jsonEncode(map));
+      }
     }
     final map = {
-      'Error': ['erro ao criar Usuario!']
+      'Error': ['erro ao criar Usuario, email não é valido ou ja existe']
     };
     return Response(500, body: jsonEncode(map));
   }
