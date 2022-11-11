@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:backend/src/Interfaces/Auth/authResources.dart';
 import 'package:backend/src/Interfaces/Produtos/repository/produtoRepository.dart';
 import 'package:backend/src/Interfaces/Produtos/viewModels/modelProdutos.dart';
 import 'package:backend/src/Interfaces/Produtos/viewModels/queryParams.dart';
@@ -13,7 +15,8 @@ class IProdutoController extends Resource {
   @override
   List<Route> get routes => [
         Route.post('/produtos', _criarProduto),
-        Route.get('/produtos', _buscarProdutos),
+        Route.get('/produtos', _buscarProdutos,
+            middlewares: [AuthGuard()]),
         Route.put('/produtos/:id', _atualizarProduto),
         Route.delete('/produtos/:id', _deleteProduto),
       ];
@@ -37,7 +40,7 @@ class IProdutoController extends Resource {
     return Response(500, body: jsonEncode(map));
   }
 
-  Future<Response> _buscarProdutos(ModularArguments req) async {
+  Future<Response> _buscarProdutos(ModularArguments req, Request r) async {
     Params params = Params(
       int.parse(req.queryParams['pageSize'].toString()),
       int.parse(req.queryParams['offset'].toString()),

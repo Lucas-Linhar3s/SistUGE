@@ -15,7 +15,7 @@ class configJwt {
 
 
 Map<String, dynamic> acessTokenClaims(Map<String, dynamic> json) {
-  final dateIn = DateTime.now().add(Duration(milliseconds: 60));
+  final dateIn = DateTime.now().add(Duration(milliseconds: 60000));
   final exp = Duration(milliseconds: dateIn.millisecondsSinceEpoch).inSeconds;
   final claims = {"id": json['id'], "nome": json["nome"], "exp": exp};
   return claims;
@@ -27,4 +27,16 @@ Map<String, dynamic> refreshTokenClaims(Map<String, dynamic> json) {
   final claims = {"id": json['id'], "nome": json["nome"], "exp": exp};
   return claims;
 }
+
+  Map getPayload(String token) {
+    final jwt = JWT.verify(
+      token,
+      SecretKey(key),
+      checkExpiresIn: false,
+      checkHeaderType: false,
+      checkNotBefore: false,
+    );
+
+    return jwt.payload;
+  }
 }
