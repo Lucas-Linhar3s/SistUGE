@@ -22,8 +22,10 @@ class AuthController extends Resource {
     ResultSet result = _repository.login(login);
     if (result.isEmpty == false) {
       final hashed = result.map((senha) => senha['senha']).first;
-      Map accessClaims = configJwt().acessTokenClaims(result.map((e) => e).first);
-      Map refreshClaims = configJwt().refreshTokenClaims(result.map((e) => e).first);
+      Map accessClaims =
+          configJwt().acessTokenClaims(result.map((e) => e).first);
+      Map refreshClaims =
+          configJwt().refreshTokenClaims(result.map((e) => e).first);
       if (_bcrypt.verifyBCrypt(password: login.senha, hashed: hashed)) {
         final accessToken =
             configJwt().generateToken(accessClaims, "accessToken");

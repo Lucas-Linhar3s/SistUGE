@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:shelf/shelf_io.dart' as io;
 import 'package:shelf/shelf.dart';
+import 'package:shelf_cors_headers/shelf_cors_headers.dart';
 import 'package:shelf_modular/shelf_modular.dart';
 
 import 'Routes/routes.dart';
@@ -11,6 +12,7 @@ class ConfigRouter {
     return Modular(
       module: ModuleRoutes(),
       middlewares: [
+        corsHeaders(),
         logRequests(),
         jsonResponse(),
       ],

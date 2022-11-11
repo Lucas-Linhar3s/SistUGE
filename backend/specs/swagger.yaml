@@ -4,11 +4,15 @@ info:
   version: "0.0.1"
   title: "Projeto UGE"
 servers:
-  - url: http://localhost:9090
+  - url: http://localhost:3333
     description: Local server
 tags:
   - name: "produtos"
     description: "Access to Produtos"
+  - name: "usuarios"
+    description: "Access to usuarios"
+  - name: "login"
+    description: "Access to login"
 paths:
   /produtos?offset={offset}&pageSize={pageSize}:
     get:
@@ -74,7 +78,7 @@ paths:
       responses:
         "200":
           description: '{"message": "Produto com id: {id} foi atualizado com sucesso!"}'
-        "500": 
+        "500":
           description: Internal server error
     delete:
       tags:
@@ -89,10 +93,42 @@ paths:
       responses:
         "200":
           description: '{"message": "Produto com id: {id} foi excluido com sucesso!"}'
-        "404": 
+        "404":
           description: '{"error": "erro ao tentar excluir produto com id: {id}!"}'
-        "500": 
+        "500":
           description: Internal server error
+  /usuarios:
+    post:
+      tags:
+        - "usuarios"
+      summary: Criar usuarios.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Usuarios"
+      responses:
+        "201":
+          description: '{"Sucesso": "Usuario criado com sucesso! id: {id}"}'
+        "500":
+          description: '{"Error": "erro ao criar usuario!"}'
+  /auth/login:
+    post:
+      tags:
+        - "login"
+      summary: Login de usuarios.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Login"
+      responses:
+        "201":
+          description: '{"Sucesso": "Login realizao com sucesso!"}'
+        "500":
+          description: '{"Error": "email ou senha invalida!"}'
 
 components:
   schemas:
@@ -114,3 +150,27 @@ components:
         id_categoria:
           type: string
           example: 1
+    Usuarios:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        nome:
+          type: string
+          example: "Lucas"
+        email:
+          type: string
+          example: "teste@teste.com"
+        senha:
+          type: string
+          example: "dsokfsod"
+    Login:
+      type: object
+      properties:
+        email:
+          type: string
+          example: "teste@teste.com"
+        senha:
+          type: string
+          example: "dsokfsod"

@@ -19,14 +19,15 @@ class IUsuarioController extends Resource {
 
   Future<Response> _criarUsuarios(ModularArguments req) async {
     final email = req.data['email'];
+    final senha = req.data['senha'].toString();
     final bool emailIsValid = RegExp(
             r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
         .hasMatch(email);
-    if (emailIsValid) {
+    if (emailIsValid && senha.length > 8) {
       ModelUsuarios usuarios = ModelUsuarios(
           nome: req.data['nome'],
           email: email,
-          senha: _BCrypt.generateBCrypt(password: req.data['senha']),
+          senha: _BCrypt.generateBCrypt(password: senha),
           isAdmin: req.data['isAdmin']);
       final result = _repository.criarUsuario(usuarios);
       if (result != 0) {
@@ -37,7 +38,7 @@ class IUsuarioController extends Resource {
       }
     }
     final map = {
-      'Error': ['erro ao criar Usuario, email não é valido ou ja existe']
+      'Error': ['email não é valido ou ja existe ou senha é muito curta']
     };
     return Response(500, body: jsonEncode(map));
   }
