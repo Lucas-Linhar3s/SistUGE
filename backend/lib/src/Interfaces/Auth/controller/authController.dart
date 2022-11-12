@@ -30,9 +30,9 @@ class AuthController extends Resource {
         final accessToken =
             configJwt().generateToken(accessClaims, "accessToken");
         final refreshToken =
-            configJwt().generateToken(refreshClaims, "accessToken");
+            configJwt().generateToken(refreshClaims, "refreshToken");
         final map = {
-          "accessToken": accessToken,
+          "accessToken": [accessToken],
           "refreshToken": [refreshToken],
         };
         return Response(200, body: jsonEncode(map));

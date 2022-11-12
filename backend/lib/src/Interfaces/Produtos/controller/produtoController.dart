@@ -14,11 +14,12 @@ final _repository = IProdutosRepo();
 class IProdutoController extends Resource {
   @override
   List<Route> get routes => [
-        Route.post('/produtos', _criarProduto),
-        Route.get('/produtos', _buscarProdutos,
+        Route.post('/produtos', _criarProduto, middlewares: [AuthGuard()]),
+        Route.get('/produtos', _buscarProdutos, middlewares: [AuthGuard()]),
+        Route.put('/produtos/:id', _atualizarProduto,
             middlewares: [AuthGuard()]),
-        Route.put('/produtos/:id', _atualizarProduto),
-        Route.delete('/produtos/:id', _deleteProduto),
+        Route.delete('/produtos/:id', _deleteProduto,
+            middlewares: [AuthGuard()]),
       ];
 
   Future<Response> _criarProduto(ModularArguments req) async {
