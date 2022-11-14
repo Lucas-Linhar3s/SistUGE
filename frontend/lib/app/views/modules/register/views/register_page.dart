@@ -112,7 +112,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   },
                                   style: TextStyle(color: Colors.white),
                                   decoration: InputDecoration(
-                                      labelText: 'Nome completo',
+                                      labelText: 'Nome Completo',
                                       labelStyle:
                                           TextStyle(color: Colors.grey[300]),
                                       border: InputBorder.none),
