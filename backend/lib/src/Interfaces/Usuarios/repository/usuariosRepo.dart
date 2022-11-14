@@ -1,8 +1,10 @@
 import 'package:backend/src/Interfaces/Usuarios/viewModels/modelUsuario.dart';
 import 'package:backend/src/Services/Database/sqlite.dart';
+import 'package:backend/src/Services/Jwt/configJWT.dart';
 import 'package:sqlite3/sqlite3.dart';
 
 final _db = ConfigDB().Sqlite();
+final _jwt = configJwt();
 
 class IUsuariosRepo {
   int criarUsuario(ModelUsuarios usuarios) {
@@ -14,7 +16,6 @@ class IUsuariosRepo {
     query.dispose();
     return lastId;
   }
-}
 
 //   int putUsuario(ModelUsuarios usuarios) {
 //     PreparedStatement query =
@@ -37,9 +38,15 @@ class IUsuariosRepo {
 //     return result;
 //   }
 
-//   int deleteUsuario(int id) {
-//     PreparedStatement delete = _db.prepare('DELETE FROM usuario WHERE id=?');
-//     delete.execute([id]);
-//     final query = _db.getUpdatedRows();
-//     return query;
-//   }
+  int deleteUsuario(int id, String token) {
+    final payload = _jwt.getPayload(token);
+    final role = payload['id'] ?? 0;
+    if (role == id) {
+      PreparedStatement delete = _db.prepare('DELETE FROM usuario WHERE id=?');
+      delete.execute([id]);
+      final query = _db.getUpdatedRows();
+      return query;
+    }
+    return 0;
+  }
+}
