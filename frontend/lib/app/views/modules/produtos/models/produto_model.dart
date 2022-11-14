@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../views/data_table/produtos_table.dart';
 
-
-
 class ProdutoModel {
   String? id;
   String? nome;
@@ -35,13 +33,14 @@ class ProdutoModel {
     };
   }
 
-  // DataRow getRow(
-  //   SelectedCallBack callback,
-  //   List<String> selectedIds,
-  // ) {
-  //   return DataRow(cells: [
-  //     DataCell(Text(nome!)),
-  //     DataCell(Text(dt_ult_compra!)),
-  //     DataCell(Text(ult_preco!)),
-  //   ]);
+  DataRow getRow(
+    SelectedCallBack callback,
+    List<String> selectedIds,
+  ) {
+    return DataRow(cells: [
+      DataCell(Text(nome!)),
+      DataCell(Text(dt_ult_compra!)),
+      DataCell(Text(ult_preco!)),
+    ]);
   }
+}

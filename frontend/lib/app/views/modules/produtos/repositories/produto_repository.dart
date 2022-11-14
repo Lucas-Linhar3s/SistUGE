@@ -19,7 +19,7 @@ class ProdutoRepository implements ProdutoInterface {
     ProdutoModel produtoModel = ProdutoModel(
         nome: nome, dt_ult_compra: dataUltCompra, ult_preco: ultPreco);
 
-    final apiResponse = await _dio.post('http://localhost:9090/produtos',
+    final apiResponse = await _dio.post('http://localhost:3333/produtos',
         data: produtoModel.toJson());
     print(apiResponse.data);
 
@@ -33,7 +33,7 @@ class ProdutoRepository implements ProdutoInterface {
 
   @override
   Future<List<ProdutoModel>> listarProdutos() async {
-    final apiResponse = await _dio.get('http://localhost:9090/produtos');
+    final apiResponse = await _dio.get('http://localhost:3333/produtos');
     return (apiResponse.data as List)
         .map((item) => ProdutoModel.fromJson(item))
         .toList();
@@ -43,7 +43,7 @@ class ProdutoRepository implements ProdutoInterface {
   Future<List<ProdutoModel>> getAllProdutos() async {
     List<ProdutoModel> produtos = [];
 
-    var apiResponse = await _dio.post('http://localhost:9090/produtos');
+    var apiResponse = await _dio.post('http://localhost:3333/produtos');
 
     if (apiResponse.statusCode == 200) {
       var pp = apiResponse.data["result"] as List;
@@ -64,7 +64,7 @@ class ProdutoRepository implements ProdutoInterface {
     var data = ProdutoModel(
         nome: nome, dt_ult_compra: dataUltCompra, ult_preco: ultPreco);
 
-    final apiResponse = await _dio.patch('http://localhost:9090/produtos');
+    final apiResponse = await _dio.patch('http://localhost:3333/produtos');
 
     if (apiResponse.statusCode == 200) {
       success = true;
@@ -80,7 +80,7 @@ class ProdutoRepository implements ProdutoInterface {
 
     ProdutoModel produtoModel = ProdutoModel();
 
-    final apiResponse = await _dio.delete('http://localhost:9090/produtos/$id',
+    final apiResponse = await _dio.delete('http://localhost:3333/produtos/$id',
         data: produtoModel.toJson());
 
     if (apiResponse.statusCode == 200) {

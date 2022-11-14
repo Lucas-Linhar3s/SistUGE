@@ -1,5 +1,6 @@
 // ignore_for_file: body_might_complete_normally_nullable
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -14,6 +15,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final Dio _dio = Dio();
+
   final _emailController = TextEditingController();
   final _senhaController = TextEditingController();
 
@@ -164,6 +167,7 @@ class _LoginPageState extends State<LoginPage> {
                                     } else if (senha.length < 6) {
                                       return 'A senha deve conter mais de 6 caracteres';
                                     }
+                                    return null;
                                   },
                                   controller: _senhaController,
                                   onChanged: (password) {
@@ -229,7 +233,10 @@ class _LoginPageState extends State<LoginPage> {
                           Observer(builder: (_) {
                             return InkWell(
                               onTap: () {
-                                Modular.to.navigate('/home');
+                                if (_formKey.currentState!.validate()) {
+                                  logar();
+                                  Modular.to.navigate('/home');
+                                }
                               },
                               child: Container(
                                 height: 50,
@@ -268,5 +275,18 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  logar() async {
+
+    var response = await _dio.post(
+      'http://localhost:3333/auth/login',
+      data: {
+        'email': _emailController.text,
+        'senha': _senhaController.text,
+      },
+    );
+    print(response.statusCode);
+    print(response.data);
   }
 }

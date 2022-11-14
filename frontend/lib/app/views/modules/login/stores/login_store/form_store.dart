@@ -70,8 +70,9 @@ abstract class _FormStoreBase with Store {
     return true;
   }
 
-    @computed
-  bool get isEmailValid => RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\[a-zA-Z]+")
+  @computed
+  bool get isEmailValid => RegExp(
+          r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\[a-zA-Z]+")
       .hasMatch(email);
 
   @computed
