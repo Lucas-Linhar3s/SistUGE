@@ -1,9 +1,12 @@
 // ignore_for_file: body_might_complete_normally_nullable
 
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../stores/login_store/form_store.dart';
 
@@ -130,7 +133,7 @@ class _LoginPageState extends State<LoginPage> {
                                   },
                                   controller: _emailController,
                                   onChanged: (email) {
-                                    formStore.setEmail(email);
+                                    formStore.validateAll();
                                   },
                                   style: TextStyle(color: Colors.white),
                                   decoration: InputDecoration(
@@ -234,8 +237,8 @@ class _LoginPageState extends State<LoginPage> {
                             return InkWell(
                               onTap: () {
                                 if (_formKey.currentState!.validate()) {
-                                  logar();
                                   Modular.to.navigate('/home');
+                                  logar();
                                 }
                               },
                               child: Container(
@@ -278,7 +281,8 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   logar() async {
-
+    SharedPreferences _sharedPreferences =
+        await SharedPreferences.getInstance();
     var response = await _dio.post(
       'http://localhost:3333/auth/login',
       data: {
@@ -286,7 +290,17 @@ class _LoginPageState extends State<LoginPage> {
         'senha': _senhaController.text,
       },
     );
-    print(response.statusCode);
-    print(response.data);
+    if (response.statusCode == 200) {
+      String token = response.data['token'];
+      await _sharedPreferences.setString('token', 'Token $token');
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.redAccent,
+          content: Text('Email ou senha inválidos'),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
   }
 }

@@ -49,7 +49,7 @@ abstract class _FormStoreBase with Store {
 
   @action
   bool validateEmail(String value) {
-    if (isNull(value) || value.isEmpty) {
+    if (isNull(value) || value.isEmpty && isEmailValid) {
       error.email = 'E-mail obrigatório';
       return false;
     }

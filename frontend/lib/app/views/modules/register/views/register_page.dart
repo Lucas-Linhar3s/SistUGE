@@ -101,23 +101,25 @@ class _RegisterPageState extends State<RegisterPage> {
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(18)),
                               child: Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 8),
-                                child: TextFormField(
-                                  controller: _usernameController,
-                                  validator: (username) {
-                                    if (username == null || username.isEmpty) {
-                                      return 'Digite o seu nome';
-                                    }
-                                    return null;
-                                  },
-                                  style: TextStyle(color: Colors.white),
-                                  decoration: InputDecoration(
-                                      labelText: 'Nome Completo',
-                                      labelStyle:
-                                          TextStyle(color: Colors.grey[300]),
-                                      border: InputBorder.none),
-                                ),
-                              ),
+                                  padding: EdgeInsets.symmetric(horizontal: 8),
+                                  child: Observer(builder: (_) {
+                                    return TextFormField(
+                                      controller: _usernameController,
+                                      validator: (username) {
+                                        if (username == null ||
+                                            username.isEmpty) {
+                                          return 'Digite o seu nome';
+                                        }
+                                        return null;
+                                      },
+                                      style: TextStyle(color: Colors.white),
+                                      decoration: InputDecoration(
+                                          labelText: 'Nome Completo',
+                                          labelStyle: TextStyle(
+                                              color: Colors.grey[300]),
+                                          border: InputBorder.none),
+                                    );
+                                  })),
                             ),
                           ),
                           SizedBox(
@@ -138,13 +140,14 @@ class _RegisterPageState extends State<RegisterPage> {
                                   return TextFormField(
                                     controller: _emailRegisterController,
                                     validator: (email) {
-                                      if (email == null || email.isEmpty) {
-                                        return 'Digite o seu e-mail';
+                                      
+                                      if (email == null || email.isEmpty || email != RegExp(r'\S+@\S+\.\S+')) {
+                                        return 'Digite um e-mail válido!';
                                       }
                                       return null;
                                     },
                                     onChanged: (email) {
-                                      formStore.setEmail(email);
+                                      formStore.validateEmail(email);
                                     },
                                     style: TextStyle(color: Colors.white),
                                     decoration: InputDecoration(
@@ -170,42 +173,46 @@ class _RegisterPageState extends State<RegisterPage> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(18)),
                         child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 8),
-                          child: TextFormField(
-                            controller: _senhaRegisterController,
-                            validator: (senha) {
-                              if (senha == null || senha.isEmpty) {
-                                return 'Digite sua senha';
-                              } else if (senha.length < 6) {
-                                return 'A senha deve conter mais de 6 caracteres';
-                              }
-                              return null;
-                            },
-                            onChanged: (password) {
-                              formStore.setPassword(password);
-                            },
-                            style: TextStyle(color: Colors.white),
-                            obscureText: isVisible,
-                            decoration: InputDecoration(
-                                errorText: formStore.error.password,
-                                labelText: 'Senha',
-                                suffixIcon: IconButton(
-                                  icon: Icon(
-                                    isVisible
-                                        ? Icons.visibility
-                                        : Icons.visibility_off,
-                                    color: Colors.grey[300],
-                                  ),
-                                  onPressed: () {
-                                    setState(() {
-                                      isVisible = !isVisible;
-                                    });
+                            padding: EdgeInsets.symmetric(horizontal: 8),
+                            child: Observer(
+                              builder: (_) {
+                                return TextFormField(
+                                  controller: _senhaRegisterController,
+                                  validator: (senha) {
+                                    if (senha == null || senha.isEmpty) {
+                                      return 'Digite sua senha';
+                                    } else if (senha.length < 6) {
+                                      return 'A senha deve conter mais de 6 caracteres';
+                                    }
+                                    return null;
                                   },
-                                ),
-                                labelStyle: TextStyle(color: Colors.grey[300]),
-                                border: InputBorder.none),
-                          ),
-                        ),
+                                  onChanged: (password) {
+                                    formStore.setPassword(password);
+                                  },
+                                  style: TextStyle(color: Colors.white),
+                                  obscureText: isVisible,
+                                  decoration: InputDecoration(
+                                      errorText: formStore.error.password,
+                                      labelText: 'Senha',
+                                      suffixIcon: IconButton(
+                                        icon: Icon(
+                                          isVisible
+                                              ? Icons.visibility
+                                              : Icons.visibility_off,
+                                          color: Colors.grey[300],
+                                        ),
+                                        onPressed: () {
+                                          setState(() {
+                                            isVisible = !isVisible;
+                                          });
+                                        },
+                                      ),
+                                      labelStyle:
+                                          TextStyle(color: Colors.grey[300]),
+                                      border: InputBorder.none),
+                                );
+                              },
+                            )),
                       ),
                       SizedBox(
                         height: 40,
