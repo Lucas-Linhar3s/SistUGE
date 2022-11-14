@@ -127,7 +127,7 @@ class _LoginPageState extends State<LoginPage> {
                                 return TextFormField(
                                   validator: (email) {
                                     if (email == null || email.isEmpty) {
-                                      return 'Digite o seu e-mail';
+                                      return 'Digite o seu e-mail!';
                                     }
                                     return null;
                                   },
