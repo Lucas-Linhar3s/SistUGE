@@ -3,11 +3,12 @@ import 'dart:convert';
 import 'package:backend/src/Interfaces/Usuarios/repository/usuariosRepo.dart';
 import 'package:backend/src/Interfaces/Usuarios/viewModels/modelUsuario.dart';
 import 'package:backend/src/Services/BCrypt/configBCrypt.dart';
+import 'package:backend/src/Services/request_extractor/configExtractor.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_modular/shelf_modular.dart';
 
 final _repository = IUsuariosRepo();
-
+final _extractor = RequestExtractor();
 final _BCrypt = ConfigBCrypt();
 
 class IUsuarioController extends Resource {
@@ -15,6 +16,7 @@ class IUsuarioController extends Resource {
   List<Route> get routes => [
         // Create new user.
         Route.post('/usuarios', _criarUsuarios),
+        Route.delete('/usuarios/:id', _deleteUsuarios),
       ];
 
   Future<Response> _criarUsuarios(ModularArguments req) async {
@@ -42,7 +44,6 @@ class IUsuarioController extends Resource {
     };
     return Response(500, body: jsonEncode(map));
   }
-}
 
 //   Future<Response> _putUsuarios(ModularArguments req) async {
 //     ModelUsuarios Usuarios = ModelUsuarios(
@@ -76,14 +77,17 @@ class IUsuarioController extends Resource {
 //     return Response(500, body: jsonEncode(map), headers: _jsonEncode);
 //   }
 
-//   Future<Response> _deleteUsuarios(ModularArguments req) async {
-//     final id = int.parse(req.params['id']);
-//     final result = _repository.deleteUsuario(id);
-//     if (result != 0) {
-//       final map = {'sucesso': 'Usuario com id: $id foi excluido com sucesso'};
-//       return Response(200, body: jsonEncode(map), headers: _jsonEncode);
-//     }
-//     final map = {'error': 'erro ao tentar excluir usuario com id: $id!'};
-//     return Response(404, body: jsonEncode(map), headers: _jsonEncode);
-//   }
-// }
+  Future<Response> _deleteUsuarios(
+      ModularArguments req, Request request) async {
+    final id = int.parse(req.params['id']);
+    final token = _extractor.getAuthorizationBearer(request);
+
+    final result = _repository.deleteUsuario(id, token);
+    if (result != 0) {
+      final map = {'sucesso': 'Usuario com id: $id foi excluido com sucesso'};
+      return Response(200, body: jsonEncode(map));
+    }
+    final map = {'error': 'erro ao tentar excluir usuario com id: $id!'};
+    return Response(404, body: jsonEncode(map));
+  }
+}
