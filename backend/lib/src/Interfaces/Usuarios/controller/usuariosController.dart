@@ -19,6 +19,7 @@ class IUsuarioController extends Resource {
         Route.post('/usuarios', _criarUsuarios),
         Route.delete('/usuarios/:id', _deleteUsuarios,
             middlewares: [AuthGuard()]),
+        Route.put('/usuarios/:id', _putUsuarios, middlewares: [AuthGuard()]),
       ];
 
   Future<Response> _criarUsuarios(ModularArguments req) async {
@@ -47,22 +48,18 @@ class IUsuarioController extends Resource {
     return Response(500, body: jsonEncode(map));
   }
 
-//   Future<Response> _putUsuarios(ModularArguments req) async {
-//     ModelUsuarios Usuarios = ModelUsuarios(
-//         id: req.data['id'], nome: req.data['nome'], email: req.data['email']);
-//     final result = _repository.putUsuario(Usuarios);
-//     if (result != 0) {
-//       final map = {
-//         'message': 'Usuario com id: ${Usuarios.id} foi atualizado com sucesso!'
-//       };
-//       return Response(200, body: jsonEncode(map), headers: _jsonEncode);
-//     } else {
-//       final map = {
-//         'message': 'Erro ao tentar atualizar usuario com id: ${Usuarios.id}!'
-//       };
-//       return Response(500, body: jsonEncode(map), headers: _jsonEncode);
-//     }
-//   }
+  Future<Response> _putUsuarios(ModularArguments req, Request request) async {
+    final token = _extractor.getAuthorizationBearer(request);
+    ModelUsuarios usuarios = ModelUsuarios(
+        id: int.parse(req.params['id']), nome: req.data['nome'], email: req.data['email']);
+    final result = _repository.putUsuario(usuarios, token);
+    if (result != 0) {
+      final map = {'Sucesso': 'Dados atualizados com sucesso!'};
+      return Response(200, body: jsonEncode(map));
+    }
+    final map = {'Error': 'Voçê não tem permissão para essa operação!'};
+    return Response(500, body: jsonEncode(map));
+  }
 
 //   Future<Response> _putSenha(ModularArguments req) async {
 //     ModelUsuarios usuario =
