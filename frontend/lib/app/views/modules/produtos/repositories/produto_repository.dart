@@ -1,6 +1,7 @@
 // ignore_for_file: override_on_non_overriding_member
 
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
 
@@ -9,6 +10,9 @@ import '../models/produto_model.dart';
 
 class ProdutoRepository implements ProdutoInterface {
   late List<ProdutoModel> listProduto;
+
+  String apiUrl = 'http://localhost:3333/';
+
   final Dio _dio = Dio();
 
   @override
@@ -20,7 +24,13 @@ class ProdutoRepository implements ProdutoInterface {
         nome: nome, dt_ult_compra: dataUltCompra, ult_preco: ultPreco);
 
     final apiResponse = await _dio.post('http://localhost:3333/produtos',
-        data: produtoModel.toJson());
+        data: produtoModel.toJson(),
+        options: Options(
+          validateStatus: (_) => true,
+          contentType: Headers.jsonContentType,
+          responseType: ResponseType.json,
+        ));
+
     print(apiResponse.data);
 
     if (apiResponse.statusCode == 201) {

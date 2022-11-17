@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../stores/login_store/form_store.dart';
 
@@ -235,7 +236,8 @@ class _LoginPageState extends State<LoginPage> {
                               onTap: () {
                                 if (_formKey.currentState!.validate()) {
                                   logar();
-                                  Modular.to.navigate('/home');
+                                } else {
+                                  return null;
                                 }
                               },
                               child: Container(
@@ -278,7 +280,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   logar() async {
-
+    SharedPreferences _sharedPreferences = await SharedPreferences.getInstance();
     var response = await _dio.post(
       'http://localhost:3333/auth/login',
       data: {
@@ -286,7 +288,15 @@ class _LoginPageState extends State<LoginPage> {
         'senha': _senhaController.text,
       },
     );
+    if (response.statusCode == 200) {
+      
+      Modular.to.navigate('/home');
+      String token = response.data['accessToken'].first;
+      await _sharedPreferences.setString('token', 'Token $token');
+    } else {
+      print('Usuários ou senha inválidos');
+    }
     print(response.statusCode);
-    print(response.data);
+    print(response.data['accessToken'].first);
   }
 }

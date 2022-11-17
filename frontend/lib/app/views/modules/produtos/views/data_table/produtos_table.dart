@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
+import '../../../login/views/login_page.dart';
 import '../../models/produto_model.dart';
 import '../../../controllers/product_store.dart';
 import '../../stores/product_store.dart';
@@ -193,7 +194,9 @@ class _HomeProdutoState extends State<HomeProduto> {
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
                                       return 'Esse campo é obrigatório!';
+                                      
                                     }
+                                    print(value);
                                     return null;
                                   },
                                   controller: controllerUltPreco,
