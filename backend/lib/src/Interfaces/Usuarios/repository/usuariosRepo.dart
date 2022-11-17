@@ -17,18 +17,23 @@ class IUsuariosRepo {
     return lastId;
   }
 
-//   int putUsuario(ModelUsuarios usuarios) {
-//     PreparedStatement query =
-//         _db.prepare('UPDATE usuario SET nome=?, email=? WHERE id=?');
-//     query.execute([
-//       usuarios.nome,
-//       usuarios.email,
-//       usuarios.id,
-//     ]);
-//     final result = _db.getUpdatedRows();
-//     query.dispose();
-//     return result;
-//   }
+  int putUsuario(ModelUsuarios usuarios, String token) {
+    final payload = _jwt.getPayload(token);
+    final idClaim = payload['id'] ?? 0;
+    if (idClaim == usuarios.id) {
+      PreparedStatement query =
+          _db.prepare('UPDATE usuario SET nome=?, email=? WHERE id=?');
+      query.execute([
+        usuarios.nome,
+        usuarios.email,
+        usuarios.id,
+      ]);
+      final result = _db.getUpdatedRows();
+      query.dispose();
+      return result;
+    }
+    return 0;
+  }
 
 //   int putSenhaUsuario(ModelUsuarios usuarios) {
 //     final query = _db.prepare('UPDATE usuario SET senha=? WHERE id=?');

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:backend/src/Interfaces/Auth/authResources.dart';
 import 'package:backend/src/Interfaces/Usuarios/repository/usuariosRepo.dart';
 import 'package:backend/src/Interfaces/Usuarios/viewModels/modelUsuario.dart';
 import 'package:backend/src/Services/BCrypt/configBCrypt.dart';
@@ -16,7 +17,9 @@ class IUsuarioController extends Resource {
   List<Route> get routes => [
         // Create new user.
         Route.post('/usuarios', _criarUsuarios),
-        Route.delete('/usuarios/:id', _deleteUsuarios),
+        Route.delete('/usuarios/:id', _deleteUsuarios,
+            middlewares: [AuthGuard()]),
+        Route.put('/usuarios/:id', _putUsuarios, middlewares: [AuthGuard()]),
       ];
 
   Future<Response> _criarUsuarios(ModularArguments req) async {
@@ -25,7 +28,7 @@ class IUsuarioController extends Resource {
     final bool emailIsValid = RegExp(
             r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
         .hasMatch(email);
-    if (emailIsValid && senha.length > 8) {
+    if (emailIsValid && senha.length >= 8) {
       ModelUsuarios usuarios = ModelUsuarios(
           nome: req.data['nome'],
           email: email,
@@ -40,27 +43,23 @@ class IUsuarioController extends Resource {
       }
     }
     final map = {
-      'Error': ['email não é valido ou ja existe ou senha é muito curta']
+      'Error': ['email não é valido ou senha é muito curta']
     };
     return Response(500, body: jsonEncode(map));
   }
 
-//   Future<Response> _putUsuarios(ModularArguments req) async {
-//     ModelUsuarios Usuarios = ModelUsuarios(
-//         id: req.data['id'], nome: req.data['nome'], email: req.data['email']);
-//     final result = _repository.putUsuario(Usuarios);
-//     if (result != 0) {
-//       final map = {
-//         'message': 'Usuario com id: ${Usuarios.id} foi atualizado com sucesso!'
-//       };
-//       return Response(200, body: jsonEncode(map), headers: _jsonEncode);
-//     } else {
-//       final map = {
-//         'message': 'Erro ao tentar atualizar usuario com id: ${Usuarios.id}!'
-//       };
-//       return Response(500, body: jsonEncode(map), headers: _jsonEncode);
-//     }
-//   }
+  Future<Response> _putUsuarios(ModularArguments req, Request request) async {
+    final token = _extractor.getAuthorizationBearer(request);
+    ModelUsuarios usuarios = ModelUsuarios(
+        id: int.parse(req.params['id']), nome: req.data['nome'], email: req.data['email']);
+    final result = _repository.putUsuario(usuarios, token);
+    if (result != 0) {
+      final map = {'Sucesso': 'Dados atualizados com sucesso!'};
+      return Response(200, body: jsonEncode(map));
+    }
+    final map = {'Error': 'Voçê não tem permissão para essa operação!'};
+    return Response(500, body: jsonEncode(map));
+  }
 
 //   Future<Response> _putSenha(ModularArguments req) async {
 //     ModelUsuarios usuario =
@@ -81,13 +80,12 @@ class IUsuarioController extends Resource {
       ModularArguments req, Request request) async {
     final id = int.parse(req.params['id']);
     final token = _extractor.getAuthorizationBearer(request);
-
     final result = _repository.deleteUsuario(id, token);
     if (result != 0) {
-      final map = {'sucesso': 'Usuario com id: $id foi excluido com sucesso'};
+      final map = {'Sucesso': 'Sua conta foi excluida com sucesso!'};
       return Response(200, body: jsonEncode(map));
     }
-    final map = {'error': 'erro ao tentar excluir usuario com id: $id!'};
-    return Response(404, body: jsonEncode(map));
+    final map = {'Error': 'Voçê não tem permissão para essa operação!'};
+    return Response(401, body: jsonEncode(map));
   }
 }
