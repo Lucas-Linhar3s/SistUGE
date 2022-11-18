@@ -1,45 +1,34 @@
-// ignore_for_file: unused_local_variable
-
-import 'package:advanced_datatable/advanced_datatable_source.dart';
 import 'package:advanced_datatable/datatable.dart';
 import 'package:cool_alert/cool_alert.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
-import '../../models/produto_model.dart';
+import '../../produtos/stores/product_store.dart';
+import '../../produtos/views/data_table/produtos_table.dart';
 
-import '../../stores/product_store.dart';
-
-class HomeProduto extends StatefulWidget {
-  HomeProduto({super.key});
+class EstoquePage extends StatefulWidget {
+  const EstoquePage({super.key});
 
   @override
-  State<HomeProduto> createState() => _HomeProdutoState();
+  State<EstoquePage> createState() => _EstoquePageState();
 }
 
-class _HomeProdutoState extends State<HomeProduto> {
+class _EstoquePageState extends State<EstoquePage> {
   var rowsPerPage = AdvancedPaginatedDataTable.defaultRowsPerPage;
-  final source = ExampleSource();
   var sortIndex = 0;
   var sortAsc = true;
+  final source = ExampleSource();
   final searchController = TextEditingController();
-
-  TableProdutoStore tableController = TableProdutoStore();
-
-  TextEditingController controllerNome = TextEditingController();
-  TextEditingController controllerUltCompra = TextEditingController();
-  TextEditingController controllerUltPreco = TextEditingController();
-
   final _formKey = GlobalKey<FormState>();
 
-  @override
-  void initState() {
-    super.initState();
-    searchController.text = '';
-  }
+  TextEditingController controllerEsNome = TextEditingController();
+  TextEditingController controllerEsLocalidade = TextEditingController();
+  TextEditingController controllerEsDtEntrada = TextEditingController();
+  TextEditingController controllerEsDtSaida = TextEditingController();
+
+  TableProdutoStore tableController = TableProdutoStore();
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +99,6 @@ class _HomeProdutoState extends State<HomeProduto> {
                               SizedBox(height: 10),
                               Observer(builder: (_) {
                                 return TextFormField(
-                                  keyboardType: TextInputType.number,
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
                                       return 'O nome do produto é obrigatório!';
@@ -118,12 +106,45 @@ class _HomeProdutoState extends State<HomeProduto> {
                                     print(value);
                                     return null;
                                   },
-                                  controller: controllerNome,
+                                  controller: controllerEsNome,
                                   decoration: InputDecoration(
                                     labelText: 'Nome',
                                     hintText: 'Insira o nome do produto',
                                     icon: Icon(
                                       Icons.account_box,
+                                      color: Color(0xff47afc9),
+                                    ),
+                                    // errorText:
+                                    //     controllerTable.validatenome(),
+                                    labelStyle: TextStyle(
+                                        fontSize: 15, color: Color(0xff47afc9)),
+                                    errorStyle: TextStyle(color: Colors.red),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(5.0),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Color(0xff47afc9)),
+                                    ),
+                                  ),
+                                );
+                              }),
+                              SizedBox(height: 10),
+                              Observer(builder: (_) {
+                                return TextFormField(
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'A localidade do produto é obrigatória!';
+                                    }
+                                    print(value);
+                                    return null;
+                                  },
+                                  controller: controllerEsNome,
+                                  decoration: InputDecoration(
+                                    labelText: 'Localidade',
+                                    hintText: 'Insira a localidade do produto',
+                                    icon: Icon(
+                                      Icons.manage_search_sharp,
                                       color: Color(0xff47afc9),
                                     ),
                                     // errorText:
@@ -155,13 +176,13 @@ class _HomeProdutoState extends State<HomeProduto> {
                                       print(value);
                                       return null;
                                     },
-                                    controller: controllerUltCompra,
+                                    controller: controllerEsDtEntrada,
                                     decoration: InputDecoration(
-                                      labelText: 'Data da compra',
+                                      labelText: 'Data de entrada',
                                       hintText:
                                           'Insira a data de compra do produto',
                                       icon: Icon(
-                                        Icons.date_range,
+                                        Icons.date_range_rounded,
                                         color: Color(0xff47afc9),
                                       ),
                                       // errorText:
@@ -197,12 +218,12 @@ class _HomeProdutoState extends State<HomeProduto> {
                                     print(value);
                                     return null;
                                   },
-                                  controller: controllerUltPreco,
+                                  controller: controllerEsLocalidade,
                                   decoration: InputDecoration(
-                                    labelText: 'Último preço',
+                                    labelText: 'Data de saída',
                                     hintText: 'Insira a data do último preço',
                                     icon: Icon(
-                                      Icons.production_quantity_limits,
+                                      Icons.date_range_rounded,
                                       color: Color(0xff47afc9),
                                     ),
                                     labelStyle: TextStyle(
@@ -224,10 +245,10 @@ class _HomeProdutoState extends State<HomeProduto> {
                         onConfirmBtnTap: () async {
                           if (_formKey.currentState!.validate()) {
                             bool create = await tableController.createProduct(
-                                controllerNome.text,
-                                controllerUltCompra.text,
-                                controllerUltPreco.text);
-
+                                controllerEsNome.text,
+                                controllerEsDtEntrada.text,
+                                controllerEsDtSaida.text,
+                                );
                             if (create) {
                               Modular.to.pop();
                               CoolAlert.show(
@@ -282,13 +303,13 @@ class _HomeProdutoState extends State<HomeProduto> {
                     onSort: setSort,
                   ),
                   DataColumn(
-                    label: Text('Última compra'),
+                    label: Text('Localidade'),
                   ),
                   DataColumn(
-                    label: Text('Último preço'),
+                    label: Text('Data de entrada'),
                   ),
                   DataColumn(
-                    label: Text('Editar'),
+                    label: Text('Data de saída'),
                   ),
                   DataColumn(
                     label: Text('Excluir'),
@@ -317,10 +338,10 @@ class _HomeProdutoState extends State<HomeProduto> {
     );
   }
 
-  void setSort(int i, bool asc) => setState(() {
-        sortIndex = i;
-        sortAsc = asc;
-      });
+  void setSort(int i, bool asc) => setState((){
+    sortIndex = i;
+    sortAsc = asc;
+  });
 
   Widget loadDadosTable() {
     return Center(
@@ -332,191 +353,5 @@ class _HomeProdutoState extends State<HomeProduto> {
 
   Widget loadErrosTable() {
     return Center(heightFactor: 10, child: Text("Carregando dados..."));
-  }
-}
-
-typedef SelectedCallBack = Function(String id, bool newSelectState);
-
-class ExampleSource extends AdvancedDataTableSource<ProdutoModel> {
-  List<String> selectedIds = [];
-  String lastSearchTerm = '';
-
-  final _formKey = GlobalKey<FormState>();
-
-  @override
-  DataRow getRow(int index) {
-    TextEditingController controllerENome = TextEditingController();
-    TextEditingController controllerEDtUltCompra = TextEditingController();
-    TextEditingController controllerEUltPreco = TextEditingController();
-
-    final TableProdutoStore controllerProduto = TableProdutoStore();
-
-    lastDetails!.rows[index];
-    return DataRow(
-      cells: [
-        DataCell(Text("${lastDetails!.rows[index].nome}")),
-        DataCell(Text("${lastDetails!.rows[index].dt_ult_compra}")),
-        DataCell(Text("${lastDetails!.rows[index].ult_preco}")),
-        DataCell(
-          Row(
-            children: [
-              Builder(
-                builder: (context) {
-                  return IconButton(
-                      tooltip: "Editar",
-                      onPressed: () {
-                        controllerENome.text = lastDetails!.rows[index].nome!;
-                        controllerEDtUltCompra = lastDetails!.rows[index]
-                            .dt_ult_compra! as TextEditingController;
-                        controllerEUltPreco = lastDetails!
-                            .rows[index].ult_preco! as TextEditingController;
-                        CoolAlert.show(
-                          width: 500,
-                          type: CoolAlertType.confirm,
-                          text: "Deseja mesmo editar esse produto?",
-                          title: "Atenção",
-                          cancelBtnText: "Não",
-                          backgroundColor: Color(0xff235b69),
-                          confirmBtnColor: Color(0xff235b69),
-                          confirmBtnText: "Sim, editar",
-                          context: context,
-                          widget: Form(
-                            key: _formKey,
-                            child: Column(
-                              children: [
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                TextFormField(
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'O nome do produto é obrigatório';
-                                    }
-                                    return null;
-                                  },
-                                  initialValue: lastDetails!.rows[index].nome,
-                                  controller: controllerENome,
-                                  decoration: InputDecoration(
-                                    labelText: 'Nome do produto',
-                                    icon: Icon(
-                                      Icons.account_box,
-                                      color: Color(0xff47afc9),
-                                    ),
-                                    labelStyle: TextStyle(
-                                        fontSize: 15, color: Color(0xff47afc9)),
-                                    errorStyle: TextStyle(color: Colors.red),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(5.0),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Color(0xff47afc9)),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                      icon: Icon(
-                        Icons.edit,
-                        color: Color(0xFF2b798c),
-                      ));
-                },
-              ),
-            ],
-          ),
-        ),
-        DataCell(
-          Row(
-            children: [
-              Builder(
-                builder: (context) {
-                  return IconButton(
-                    tooltip: "Excluir",
-                    onPressed: () async {
-                      await CoolAlert.show(
-                          width: 500,
-                          context: context,
-                          type: CoolAlertType.confirm,
-                          text: "Deseja mesmo excluir esse produto?",
-                          title: "Atenção",
-                          cancelBtnText: "Não",
-                          backgroundColor: Color(0xff235b69),
-                          confirmBtnText: "Sim, excluir",
-                          confirmBtnColor: Color(0xff235b69),
-                          onConfirmBtnTap: () async {},
-                          onCancelBtnTap: () {
-                            Modular.to.pop();
-                          });
-                    },
-                    icon: Icon(
-                      Icons.delete,
-                      color: Colors.red,
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  @override
-  int get selectedRowCount => selectedIds.length;
-
-  void selectedRow(String id, bool newSelectState) {
-    if (selectedIds.contains(id)) {
-      selectedIds.remove(id);
-    } else {
-      selectedIds.add(id);
-    }
-    notifyListeners();
-  }
-
-  void filterServerSide(String filterQuery) async {
-    lastSearchTerm = filterQuery.toLowerCase().trim();
-    setNextView();
-  }
-
-  void reloadPage() async {
-    setNextView();
-  }
-
-  @override
-  Future<RemoteDataSourceDetails<ProdutoModel>> getNextPage(
-      NextPageRequest pageRequest) async {
-    final Dio _dio = Dio();
-
-    final response =
-        await _dio.get('http://localhost:9090/produtos', queryParameters: {
-      'offset': pageRequest.offset.toString(),
-      'pageSize': pageRequest.pageSize.toString(),
-      if (lastSearchTerm.isNotEmpty) 'nome': lastSearchTerm,
-    });
-    if (response.statusCode == 200) {
-      final data = response.data;
-
-      return RemoteDataSourceDetails(
-        data['totalRows'] as int,
-        (data['rows'] as List<dynamic>)
-            .map((json) => ProdutoModel.fromJson(json))
-            .toList(),
-        filteredRows: lastSearchTerm.isNotEmpty
-            ? (data['rows'] as List<dynamic>).length
-            : null,
-      );
-    } else {
-      throw Exception('ERROOOOORRRR');
-    }
   }
 }

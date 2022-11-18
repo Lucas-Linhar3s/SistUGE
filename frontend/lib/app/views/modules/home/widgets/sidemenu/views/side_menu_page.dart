@@ -3,7 +3,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 
 
 class MenuPage extends StatefulWidget {
-  const MenuPage({Key? key}) : super(key: key);
+   MenuPage({Key? key}) : super(key: key);
 
   @override
   State<MenuPage> createState() => _MenuPageState();
@@ -19,7 +19,7 @@ class _MenuPageState extends State<MenuPage> {
           Drawer(
             width: MediaQuery.of(context).size.width * 0.2,
             child: Container(
-              decoration: const BoxDecoration(
+              decoration:  BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
                     Color.fromARGB(255, 26, 35, 126),
@@ -34,10 +34,10 @@ class _MenuPageState extends State<MenuPage> {
                 padding: EdgeInsets.zero,
                 children: <Widget>[
                   Padding(
-                    padding: const EdgeInsets.all(20),
+                    padding:  EdgeInsets.all(20),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
+                      children:  [
                         Padding(
                           padding: EdgeInsets.all(8.0),
                           child: Icon(
@@ -60,7 +60,7 @@ class _MenuPageState extends State<MenuPage> {
                       ],
                     ),
                   ),
-                  const Padding(
+                   Padding(
                     padding: EdgeInsets.all(16.0),
                     child: Text(
                       'Lista de menus',
@@ -73,10 +73,19 @@ class _MenuPageState extends State<MenuPage> {
                   ListTile(
                     iconColor: Colors.white,
                     textColor: Colors.white,
-                    leading: const Icon(Icons.featured_play_list_outlined),
-                    title: const Text('Produtos'),
+                    leading:  Icon(Icons.featured_play_list_outlined),
+                    title:  Text('Produtos'),
                     onTap: () {
                       Modular.to.navigate('/home/produtos');
+                    },
+                  ),
+                  ListTile(
+                    iconColor: Colors.white,
+                    textColor: Colors.white,
+                    leading:  Icon(Icons.storage),
+                    title:  Text('Estoque'),
+                    onTap: () {
+                      Modular.to.navigate('/home/estoque');
                     },
                   ),
                 ],

@@ -1,9 +1,9 @@
-// ignore_for_file: override_on_non_overriding_member
+// ignore_for_file: override_on_non_overriding_member, unused_local_variable
 
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../interface/produto_interface.dart';
 import '../models/produto_model.dart';
@@ -18,18 +18,24 @@ class ProdutoRepository implements ProdutoInterface {
   @override
   Future<bool> cadastrarProduto(
       String nome, String dataUltCompra, String ultPreco) async {
+    SharedPreferences _sharedPreferences =
+        await SharedPreferences.getInstance();
     bool success = true;
-
+    var tokenCreate = await _sharedPreferences.getString('token');
     ProdutoModel produtoModel = ProdutoModel(
         nome: nome, dt_ult_compra: dataUltCompra, ult_preco: ultPreco);
-
-    final apiResponse = await _dio.post('http://localhost:3333/produtos',
-        data: produtoModel.toJson(),
-        options: Options(
-          validateStatus: (_) => true,
-          contentType: Headers.jsonContentType,
-          responseType: ResponseType.json,
-        ));
+    final apiResponse = await _dio.post(
+      'http://localhost:3333/produtos',
+      data: produtoModel.toJson(),
+      options: Options(
+        validateStatus: (_) => true,
+        contentType: Headers.jsonContentType,
+        responseType: ResponseType.json,
+        headers: {
+          'authorization': 'Bearer $tokenCreate',
+        },
+      ),
+    );
 
     print(apiResponse.data);
 

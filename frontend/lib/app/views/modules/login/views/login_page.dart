@@ -280,7 +280,8 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   logar() async {
-    SharedPreferences _sharedPreferences = await SharedPreferences.getInstance();
+    SharedPreferences _sharedPreferences =
+        await SharedPreferences.getInstance();
     var response = await _dio.post(
       'http://localhost:3333/auth/login',
       data: {
@@ -289,14 +290,15 @@ class _LoginPageState extends State<LoginPage> {
       },
     );
     if (response.statusCode == 200) {
-      
       Modular.to.navigate('/home');
       String token = response.data['accessToken'].first;
-      await _sharedPreferences.setString('token', 'Token $token');
+      await _sharedPreferences.setString('token', '$token');
+      var log = await _sharedPreferences.get('token');
+      print(log);
     } else {
       print('Usuários ou senha inválidos');
     }
-    print(response.statusCode);
-    print(response.data['accessToken'].first);
+    // print(response.statusCode);
+    // print(response.data['accessToken'].first);
   }
 }

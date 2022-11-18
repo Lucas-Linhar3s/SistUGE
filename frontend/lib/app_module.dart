@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
+import 'app/views/modules/estoque/estoque_module.dart';
 import 'app/views/modules/home/home_page_module.dart';
 import 'app/views/modules/home/widgets/sidemenu/side_menu_module.dart';
 import 'app/views/modules/login/login_page_module.dart';
@@ -21,6 +22,7 @@ class AppModule extends Module {
     ModuleRoute('/home', module: MenuPageModule()),
     ModuleRoute('/produtos', module: ProdutosModule()),
     ModuleRoute('/register', module: RegisterPageModule()),
+    ModuleRoute('/estoque', module: EstoquePageModule()),
     WildcardRoute(
       child: (_, __) => const Scaffold(
         body: Center(
