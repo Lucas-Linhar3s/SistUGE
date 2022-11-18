@@ -39,6 +39,14 @@ class _EstoquePageState extends State<EstoquePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              SizedBox(height: 10),
+              Text(
+                'Tabela de estoque',
+                style: TextStyle(
+                  fontSize: 25,
+                ),
+              ),
+              SizedBox(height: 15),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -180,7 +188,7 @@ class _EstoquePageState extends State<EstoquePage> {
                                     decoration: InputDecoration(
                                       labelText: 'Data de entrada',
                                       hintText:
-                                          'Insira a data de compra do produto',
+                                          'Insira a data de entrada do produto',
                                       icon: Icon(
                                         Icons.date_range_rounded,
                                         color: Color(0xff47afc9),
@@ -221,7 +229,7 @@ class _EstoquePageState extends State<EstoquePage> {
                                   controller: controllerEsLocalidade,
                                   decoration: InputDecoration(
                                     labelText: 'Data de saída',
-                                    hintText: 'Insira a data do último preço',
+                                    hintText: 'Insira a data de saída do produto',
                                     icon: Icon(
                                       Icons.date_range_rounded,
                                       color: Color(0xff47afc9),
@@ -245,10 +253,10 @@ class _EstoquePageState extends State<EstoquePage> {
                         onConfirmBtnTap: () async {
                           if (_formKey.currentState!.validate()) {
                             bool create = await tableController.createProduct(
-                                controllerEsNome.text,
-                                controllerEsDtEntrada.text,
-                                controllerEsDtSaida.text,
-                                );
+                              controllerEsNome.text,
+                              controllerEsDtEntrada.text,
+                              controllerEsDtSaida.text,
+                            );
                             if (create) {
                               Modular.to.pop();
                               CoolAlert.show(
@@ -338,10 +346,10 @@ class _EstoquePageState extends State<EstoquePage> {
     );
   }
 
-  void setSort(int i, bool asc) => setState((){
-    sortIndex = i;
-    sortAsc = asc;
-  });
+  void setSort(int i, bool asc) => setState(() {
+        sortIndex = i;
+        sortAsc = asc;
+      });
 
   Widget loadDadosTable() {
     return Center(

@@ -135,7 +135,7 @@ class _LoginPageState extends State<LoginPage> {
                                   },
                                   style: TextStyle(color: Colors.white),
                                   decoration: InputDecoration(
-                                      errorText: formStore.error.email,
+                                      // errorText: formStore.error.email,
                                       labelText: 'E-mail',
                                       suffixIcon: IconButton(
                                         icon: Icon(
@@ -177,7 +177,7 @@ class _LoginPageState extends State<LoginPage> {
                                   style: TextStyle(color: Colors.white),
                                   obscureText: isVisible,
                                   decoration: InputDecoration(
-                                      errorText: formStore.error.password,
+                                      // errorText: formStore.error.password,
                                       labelText: 'Senha',
                                       suffixIcon: IconButton(
                                         icon: Icon(
@@ -295,8 +295,6 @@ class _LoginPageState extends State<LoginPage> {
       await _sharedPreferences.setString('token', '$token');
       var log = await _sharedPreferences.get('token');
       print(log);
-    } else {
-      print('Usuários ou senha inválidos');
     }
     // print(response.statusCode);
     // print(response.data['accessToken'].first);

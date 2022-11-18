@@ -50,6 +50,14 @@ class _HomeProdutoState extends State<HomeProduto> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              SizedBox(height: 10),
+              Text(
+                'Tabela de produtos',
+                style: TextStyle(
+                  fontSize: 25,
+                ),
+              ),
+              SizedBox(height: 15),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

@@ -1,10 +1,12 @@
 // ignore_for_file: unused_field, unused_local_variable
 
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 import '../../login/stores/login_store/form_store.dart';
+import '../../produtos/views/data_table/produtos_table.dart';
 import '../repository/register_repository.dart';
 import '../store/register_store.dart';
 
@@ -19,6 +21,8 @@ class _RegisterPageState extends State<RegisterPage> {
   bool isVisible = true;
 
   final _formKey = GlobalKey<FormState>();
+
+  final source = ExampleSource();
 
   final _usernameController = TextEditingController();
   final _emailRegisterController = TextEditingController();
@@ -95,37 +99,44 @@ class _RegisterPageState extends State<RegisterPage> {
                       SizedBox(
                         height: 20,
                       ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Card(
-                              color: Colors.grey.withOpacity(.4),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(18)),
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 8),
-                                child: TextFormField(
-                                  controller: _usernameController,
-                                  validator: (username) {
-                                    if (username == null || username.isEmpty) {
-                                      return 'Digite o seu nome';
-                                    }
-                                    return null;
-                                  },
-                                  style: TextStyle(color: Colors.white),
-                                  decoration: InputDecoration(
-                                      labelText: 'Nome Completo',
-                                      labelStyle:
-                                          TextStyle(color: Colors.grey[300]),
-                                      border: InputBorder.none),
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 30,
-                          ),
-                        ],
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 6),
+                        child: Card(
+                          color: Colors.grey.withOpacity(.4),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18)),
+                          child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 8),
+                              child: Observer(
+                                builder: (_) {
+                                  return TextFormField(
+                                    controller: _usernameController,
+                                    validator: (nome) {
+                                      if (nome == null ||
+                                          nome.isEmpty ||
+                                          nome.length <= 3) {
+                                        return 'Este campo tem que ser válido';
+                                      }
+                                      return null;
+                                    },
+                                    style: TextStyle(color: Colors.white),
+                                    decoration: InputDecoration(
+                                        // errorText: formStore.error.email,
+                                        labelText: 'Nome',
+                                        suffixIcon: IconButton(
+                                          icon: Icon(
+                                            Icons.email,
+                                            color: Colors.grey[300],
+                                          ),
+                                          onPressed: () {},
+                                        ),
+                                        labelStyle:
+                                            TextStyle(color: Colors.grey[300]),
+                                        border: InputBorder.none),
+                                  );
+                                },
+                              )),
+                        ),
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 6),
@@ -141,7 +152,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                     controller: _emailRegisterController,
                                     validator: (email) {
                                       if (email == null || email.isEmpty) {
-                                        return 'Digite o seu e-mail';
+                                        return 'Este campo tem que ser válido';
                                       }
                                       return null;
                                     },
@@ -150,7 +161,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                     },
                                     style: TextStyle(color: Colors.white),
                                     decoration: InputDecoration(
-                                        errorText: formStore.error.email,
+                                        // errorText: formStore.error.email,
                                         labelText: 'E-mail',
                                         suffixIcon: IconButton(
                                           icon: Icon(
@@ -167,45 +178,49 @@ class _RegisterPageState extends State<RegisterPage> {
                               )),
                         ),
                       ),
-                      Card(
-                        color: Colors.grey.withOpacity(.4),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18)),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 8),
-                          child: TextFormField(
-                            controller: _senhaRegisterController,
-                            validator: (senha) {
-                              if (senha == null || senha.isEmpty) {
-                                return 'Digite sua senha';
-                              } else if (senha.length < 6) {
-                                return 'A senha deve conter mais de 6 caracteres';
-                              }
-                              return null;
-                            },
-                            onChanged: (password) {
-                              formStore.setPassword(password);
-                            },
-                            style: TextStyle(color: Colors.white),
-                            obscureText: isVisible,
-                            decoration: InputDecoration(
-                                errorText: formStore.error.password,
-                                labelText: 'Senha',
-                                suffixIcon: IconButton(
-                                  icon: Icon(
-                                    isVisible
-                                        ? Icons.visibility
-                                        : Icons.visibility_off,
-                                    color: Colors.grey[300],
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 6),
+                        child: Card(
+                          color: Colors.grey.withOpacity(.4),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18)),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 8),
+                            child: TextFormField(
+                              controller: _senhaRegisterController,
+                              validator: (senha) {
+                                if (senha == null || senha.isEmpty) {
+                                  return 'Este campo tem que ser válido';
+                                } else if (senha.length < 6) {
+                                  return 'A senha deve conter mais de 6 caracteres';
+                                }
+                                return null;
+                              },
+                              onChanged: (password) {
+                                formStore.setPassword(password);
+                              },
+                              style: TextStyle(color: Colors.white),
+                              obscureText: isVisible,
+                              decoration: InputDecoration(
+                                  // errorText: formStore.error.password,
+                                  labelText: 'Senha',
+                                  suffixIcon: IconButton(
+                                    icon: Icon(
+                                      isVisible
+                                          ? Icons.visibility
+                                          : Icons.visibility_off,
+                                      color: Colors.grey[300],
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        isVisible = !isVisible;
+                                      });
+                                    },
                                   ),
-                                  onPressed: () {
-                                    setState(() {
-                                      isVisible = !isVisible;
-                                    });
-                                  },
-                                ),
-                                labelStyle: TextStyle(color: Colors.grey[300]),
-                                border: InputBorder.none),
+                                  labelStyle:
+                                      TextStyle(color: Colors.grey[300]),
+                                  border: InputBorder.none),
+                            ),
                           ),
                         ),
                       ),
@@ -249,6 +264,18 @@ class _RegisterPageState extends State<RegisterPage> {
                                         _usernameController.text,
                                         _emailRegisterController.text,
                                         _senhaRegisterController.text);
+                                if (create) {
+                                  SnackBar(
+                                    behavior: SnackBarBehavior.floating,
+                                    backgroundColor: Colors.green,
+                                      content:
+                                          Text('Usuário criado com sucesso!'));
+                                } else {
+                                  SnackBar(
+                                    behavior: SnackBarBehavior.floating,
+                                    backgroundColor: Colors.redAccent,
+                                    content: Text('Algo deu errado!'));
+                                }
                               }
                             },
                             child: Container(
