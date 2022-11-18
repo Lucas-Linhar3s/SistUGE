@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:backend/src/Interfaces/Auth/authResources.dart';
 import 'package:backend/src/Interfaces/Produtos/repository/produtoRepository.dart';
