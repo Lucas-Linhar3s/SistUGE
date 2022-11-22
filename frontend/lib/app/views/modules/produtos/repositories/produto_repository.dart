@@ -49,7 +49,14 @@ class ProdutoRepository implements ProdutoInterface {
 
   @override
   Future<List<ProdutoModel>> listarProdutos() async {
-    final apiResponse = await _dio.get('http://localhost:3333/produtos');
+    SharedPreferences _sharedPreferences =
+        await SharedPreferences.getInstance();
+
+    var tokenCreate = await _sharedPreferences.getString('token');
+
+    final apiResponse = await _dio.get(
+      'http://localhost:3333/produtos',
+    );
     return (apiResponse.data as List)
         .map((item) => ProdutoModel.fromJson(item))
         .toList();

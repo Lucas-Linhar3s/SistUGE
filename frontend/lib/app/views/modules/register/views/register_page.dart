@@ -1,11 +1,10 @@
 // ignore_for_file: unused_field, unused_local_variable
 
-import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
-import '../../login/stores/login_store/form_store.dart';
+import '../../login/stores/form_store.dart';
 import '../../produtos/views/data_table/produtos_table.dart';
 import '../repository/register_repository.dart';
 import '../store/register_store.dart';
@@ -266,15 +265,15 @@ class _RegisterPageState extends State<RegisterPage> {
                                         _senhaRegisterController.text);
                                 if (create) {
                                   SnackBar(
-                                    behavior: SnackBarBehavior.floating,
-                                    backgroundColor: Colors.green,
+                                      behavior: SnackBarBehavior.floating,
+                                      backgroundColor: Colors.green,
                                       content:
                                           Text('Usuário criado com sucesso!'));
                                 } else {
                                   SnackBar(
-                                    behavior: SnackBarBehavior.floating,
-                                    backgroundColor: Colors.redAccent,
-                                    content: Text('Algo deu errado!'));
+                                      behavior: SnackBarBehavior.floating,
+                                      backgroundColor: Colors.redAccent,
+                                      content: Text('Algo deu errado!'));
                                 }
                               }
                             },
