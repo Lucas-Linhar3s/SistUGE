@@ -1,5 +1,7 @@
 import 'package:advanced_datatable/datatable.dart';
 import 'package:cool_alert/cool_alert.dart';
+import 'package:dart_learning/app/views/api/sheets/product_fields.dart';
+import 'package:dart_learning/app/views/api/sheets/product_sheets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -229,7 +231,8 @@ class _EstoquePageState extends State<EstoquePage> {
                                   controller: controllerEsLocalidade,
                                   decoration: InputDecoration(
                                     labelText: 'Data de saída',
-                                    hintText: 'Insira a data de saída do produto',
+                                    hintText:
+                                        'Insira a data de saída do produto',
                                     icon: Icon(
                                       Icons.date_range_rounded,
                                       color: Color(0xff47afc9),
@@ -339,6 +342,18 @@ class _EstoquePageState extends State<EstoquePage> {
                   return amountText;
                 },
               ),
+              SizedBox(height: 10),
+              ElevatedButton(
+                  onPressed: () async {
+                    final produtos = {
+                      ProductFields.id: 1,
+                      ProductFields.name: 'Jackson',
+                      ProductFields.dt_ult_compra: '22112022',
+                      ProductFields.ult_preco: '5153.12',
+                    };
+                    await UserSheetsApi.insert([produtos]);
+                  },
+                  child: Text('Exportar dados'))
             ],
           ),
         ),
