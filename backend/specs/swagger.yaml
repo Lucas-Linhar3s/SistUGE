@@ -21,7 +21,7 @@ paths:
       summary: Returns a list of produtos.
       parameters:
         - in: path
-          name: offset
+          name: ofset
           required: true
           schema:
             type: integer
