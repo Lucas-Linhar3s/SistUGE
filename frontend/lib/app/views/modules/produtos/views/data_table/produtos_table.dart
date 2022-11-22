@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../models/produto_model.dart';
 
@@ -503,14 +504,28 @@ class ExampleSource extends AdvancedDataTableSource<ProdutoModel> {
   @override
   Future<RemoteDataSourceDetails<ProdutoModel>> getNextPage(
       NextPageRequest pageRequest) async {
+    SharedPreferences _sharedPreferences =
+        await SharedPreferences.getInstance();
+
+    var tokenCreate = await _sharedPreferences.getString('token');
     final Dio _dio = Dio();
 
-    final response =
-        await _dio.get('http://localhost:9090/produtos', queryParameters: {
-      'offset': pageRequest.offset.toString(),
-      'pageSize': pageRequest.pageSize.toString(),
-      if (lastSearchTerm.isNotEmpty) 'nome': lastSearchTerm,
-    });
+    final response = await _dio.get(
+      'http://localhost:3333/produtos',
+      queryParameters: {
+        'offset': pageRequest.offset.toString(),
+        'pageSize': pageRequest.pageSize.toString(),
+        if (lastSearchTerm.isNotEmpty) 'nome': lastSearchTerm,
+      },
+      options: Options(
+        validateStatus: (_) => true,
+        contentType: Headers.jsonContentType,
+        responseType: ResponseType.json,
+        headers: {
+          'authorization': 'Bearer $tokenCreate',
+        },
+      ),
+    );
     if (response.statusCode == 200) {
       final data = response.data;
 
