@@ -25,6 +25,8 @@ paths:
       tags:
         - "Produtos"
       summary: Retorna uma lista de produtos
+      security:
+        - bearerAuth: []
       parameters:
         - in: path
           name: offset
@@ -53,6 +55,8 @@ paths:
       tags:
         - "Produtos"
       summary: Cria um novo produto.
+      security:
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -69,6 +73,8 @@ paths:
       tags:
         - "Produtos"
       summary: Atualiza um produto
+      security:
+        - bearerAuth: []
       parameters:
         - in: path
           name: id
@@ -90,6 +96,8 @@ paths:
       tags:
         - "Produtos"
       summary: Deleta um produto
+      security:
+        - bearerAuth: []
       parameters:
         - in: path
           name: id
@@ -126,6 +134,8 @@ paths:
       tags:
         - "Usuarios"
       summary: Atualiza um determinado usuario
+      security:
+        - bearerAuth: []
       parameters:
         - in: path
           name: id
@@ -150,6 +160,8 @@ paths:
       tags:
         - "Usuarios"
       summary: Deleta uma conta de usuario
+      security:
+        - bearerAuth: []
       parameters:
         - in: path
           name: id
@@ -182,6 +194,12 @@ paths:
           description: '{"Error": "email ou senha invalida!"}'
 
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: "Auth header (Authorization) Access Token"
   schemas:
     Produtos:
       type: object
