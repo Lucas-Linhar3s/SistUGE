@@ -51,13 +51,15 @@ class IUsuarioController extends Resource {
   Future<Response> _putUsuarios(ModularArguments req, Request request) async {
     final token = _extractor.getAuthorizationBearer(request);
     ModelUsuarios usuarios = ModelUsuarios(
-        id: int.parse(req.params['id']), nome: req.data['nome'], email: req.data['email']);
+        id: int.parse(req.params['id']),
+        nome: req.data['nome'],
+        email: req.data['email']);
     final result = _repository.putUsuario(usuarios, token);
     if (result != 0) {
       final map = {'Sucesso': 'Dados atualizados com sucesso!'};
       return Response(200, body: jsonEncode(map));
     }
-    final map = {'Error': 'Voçê não tem permissão para essa operação!'};
+    final map = {'Error': 'Você não tem permissão para essa operação!'};
     return Response(500, body: jsonEncode(map));
   }
 
