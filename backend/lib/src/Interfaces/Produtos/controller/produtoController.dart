@@ -44,7 +44,7 @@ class IProdutoController extends Resource {
     Params params = Params(
       int.parse(req.queryParams['pageSize'].toString()),
       int.parse(req.queryParams['offset'].toString()),
-      req.queryParams["name"].toString(),
+      // req.queryParams["name"].toString(),
     );
     final result = _repository.buscarProdutos(params);
     if (result.isEmpty == false) {
