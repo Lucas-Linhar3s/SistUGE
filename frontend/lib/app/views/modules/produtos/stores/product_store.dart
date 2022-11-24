@@ -11,8 +11,8 @@ abstract class _TableProdutoStoreBase with Store {
 
   @observable
   String nome = '';
-  String? dataUltCompra = '';
-  String? ultPreco = '';
+  int dataUltCompra = 0;
+  double ultPreco = 0.0;
 
   String? validateName() {
     if (nome.isEmpty) {
