@@ -23,9 +23,13 @@ class IProdutosRepo {
   // }
 
   ResultSet buscarProdutos(Params params) {
+    // ResultSet query = _db.select(
+    //     'SELECT * FROM produtos ORDER BY id LIMIT ? OFFSET ?;',
+    //     [params.limite, params.offset]);
+    // return query;
     ResultSet query = _db.select(
-        'SELECT * FROM produtos ORDER BY id LIMIT ? OFFSET ?;',
-        [params.limite, params.offset]);
+        "SELECT *, COUNT(*) OVER() AS count FROM produtos WHERE CASE WHEN nome = '' THEN true ELSE nome LIKE '%' || ? || '%' END LIMIT ? OFFSET ?;",
+        [params.nome, params.limite, params.offset]);
     return query;
   }
 
