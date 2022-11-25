@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
@@ -84,7 +83,7 @@ class ProdutoRepository implements ProdutoInterface {
     bool success = false;
 
     var data = ProdutoModel(
-        nome: nome, dt_ult_compra: dataUltCompra, ult_preco: ultPreco);
+        nome: nome, dt_ult_compra: dataUltCompra, ult_preco: ultPreco, id: id);
 
     final apiResponse = await _dio.patch('http://localhost:3333/produtos');
 
@@ -96,21 +95,35 @@ class ProdutoRepository implements ProdutoInterface {
     return success;
   }
 
-  // @override
-  // Future<bool> excluirProduto(int id) async {
-  //   bool success = false;
+  @override
+  Future<bool> excluirProduto(int id) async {
+    SharedPreferences _sharedPreferences =
+        await SharedPreferences.getInstance();
 
-  //   ProdutoModel produtoModel = ProdutoModel(nome: nome, dt_ult_compra: dt_ult_compra, ult_preco: ult_preco)
+    var tokenCreate = await _sharedPreferences.getString('token');
+    bool success = false;
 
-  //   final apiResponse = await _dio.delete('http://localhost:3333/produtos/$id',
-  //       data: produtoModel.toJson());
+    ProdutoModel produtoModel = ProdutoModel(id: id);
 
-  //   if (apiResponse.statusCode == 200) {
-  //     print(apiResponse.data);
-  //     success = true;
-  //   } else {
-  //     success = false;
-  //   }
-  //   return success;
-  // }
+    final apiResponse = await _dio.delete(
+      'http://localhost:3333/produtos/$id',
+      data: produtoModel.toJson(),
+      options: Options(
+        validateStatus: (_) => true,
+        contentType: Headers.jsonContentType,
+        responseType: ResponseType.json,
+        headers: {
+          'authorization': 'Bearer $tokenCreate',
+        },
+      ),
+    );
+
+    if (apiResponse.statusCode == 200) {
+      print(apiResponse.data);
+      success = true;
+    } else {
+      success = false;
+    }
+    return success;
+  }
 }

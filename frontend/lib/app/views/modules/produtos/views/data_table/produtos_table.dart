@@ -1,6 +1,7 @@
 import 'package:advanced_datatable/advanced_datatable_source.dart';
 import 'package:advanced_datatable/datatable.dart';
 import 'package:cool_alert/cool_alert.dart';
+import 'package:dart_learning/app/views/modules/produtos/repositories/produto_repository.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -352,13 +353,19 @@ class ExampleSource extends AdvancedDataTableSource<ProdutoModel> {
 
   @override
   DataRow getRow(int index) {
-    TextEditingController controllerENome = TextEditingController();
-    TextEditingController controllerEDtUltCompra = TextEditingController();
-    TextEditingController controllerEUltPreco = TextEditingController();
+    final controllerENome = TextEditingController();
+    final controllerEDtUltCompra = TextEditingController();
+    final controllerEUltPreco = TextEditingController();
+
+  final source = ExampleSource();
+    
 
     final TableProdutoStore controllerProduto = TableProdutoStore();
+    final ProdutoRepository produtoRepository = ProdutoRepository();
+    final ProdutoModel produtoModel = ProdutoModel();
 
     lastDetails!.rows[index];
+
     return DataRow(
       cells: [
         DataCell(Text("${lastDetails!.rows[index].nome}")),
@@ -372,11 +379,9 @@ class ExampleSource extends AdvancedDataTableSource<ProdutoModel> {
                   return IconButton(
                       tooltip: "Editar",
                       onPressed: () {
-                        controllerENome.text = lastDetails!.rows[index].nome;
-                        controllerEDtUltCompra = lastDetails!.rows[index]
-                            .dt_ult_compra as TextEditingController;
-                        controllerEUltPreco = lastDetails!
-                            .rows[index].ult_preco as TextEditingController;
+                        controllerENome.text;
+                        controllerEDtUltCompra.text;
+                        controllerEUltPreco.text;
                         CoolAlert.show(
                           width: 500,
                           type: CoolAlertType.confirm,
@@ -459,7 +464,20 @@ class ExampleSource extends AdvancedDataTableSource<ProdutoModel> {
                           backgroundColor: Color(0xff235b69),
                           confirmBtnText: "Sim, excluir",
                           confirmBtnColor: Color(0xff235b69),
-                          onConfirmBtnTap: () async {},
+                          onConfirmBtnTap: () async {
+                            CoolAlert.show(
+                                width: 500,
+                                context: context,
+                                type: CoolAlertType.success,
+                                backgroundColor: Color(0xff235b69),
+                                confirmBtnColor: Color(0xff235b69),
+                                title: "Sucesso",
+                                text: "Produto excluído com sucesso");
+                            final id = lastDetails!.rows[index].id;
+                            produtoRepository.excluirProduto(id!);
+                            source.reloadPage();
+                            Modular.to.pop('/home/produtos');
+                          },
                           onCancelBtnTap: () {
                             Modular.to.pop();
                           });
@@ -497,6 +515,10 @@ class ExampleSource extends AdvancedDataTableSource<ProdutoModel> {
 
   void reloadPage() async {
     setNextView();
+  }
+
+  void refreshPage() async {
+    reloadPage();
   }
 
   @override

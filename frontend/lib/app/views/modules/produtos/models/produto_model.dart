@@ -4,15 +4,15 @@ import '../views/data_table/produtos_table.dart';
 
 class ProdutoModel {
   int? id;
-  String nome;
-  String dt_ult_compra;
-  String ult_preco;
+  String? nome;
+  String? dt_ult_compra;
+  String? ult_preco;
 
   ProdutoModel({
-    this.id,
-    required this.nome,
-    required this.dt_ult_compra,
-    required this.ult_preco,
+     this.id,
+     this.nome,
+     this.dt_ult_compra,
+     this.ult_preco,
   });
 
   factory ProdutoModel.fromJson(Map<String, dynamic> json) {
@@ -38,7 +38,7 @@ class ProdutoModel {
     List<String> selectedIds,
   ) {
     return DataRow(cells: [
-      DataCell(Text(nome)),
+      DataCell(Text(nome!)),
       DataCell(Text(dt_ult_compra.toString())),
       DataCell(Text(ult_preco.toString())),
     ]);
