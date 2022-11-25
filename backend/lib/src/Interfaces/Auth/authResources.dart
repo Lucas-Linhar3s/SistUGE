@@ -29,7 +29,6 @@ class AuthGuard extends ModularMiddleware {
             audiance: isRefreshToken ? 'refreshToken' : 'accessToken');
         final payload = jwt.getPayload(token);
         final role = payload['id'] ?? 0;
-        print(role);
         if (roles.isEmpty || roles.contains(role)) {
           return handler(request);
         }
