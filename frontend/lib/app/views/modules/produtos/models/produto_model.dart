@@ -7,13 +7,20 @@ class ProdutoModel {
   String? nome;
   String? dt_ult_compra;
   String? ult_preco;
+  String? localidade;
+  String? quantidade;
+  String? saida;
+  String? entrada;
 
-  ProdutoModel({
-     this.id,
-     this.nome,
-     this.dt_ult_compra,
-     this.ult_preco,
-  });
+  ProdutoModel(
+      {this.id,
+      this.nome,
+      this.dt_ult_compra,
+      this.ult_preco,
+      this.localidade,
+      this.quantidade,
+      this.saida,
+      this.entrada});
 
   factory ProdutoModel.fromJson(Map<String, dynamic> json) {
     return ProdutoModel(
@@ -21,6 +28,10 @@ class ProdutoModel {
       nome: json['nome'],
       dt_ult_compra: json['dt_ult_compra'],
       ult_preco: json['ult_preco'],
+      localidade: json['localidade'],
+      quantidade: json['quantidade'],
+      saida: json['saida'],
+      entrada: json['entrada'],
     );
   }
 
@@ -30,6 +41,10 @@ class ProdutoModel {
       'nome': nome,
       'dt_ult_compra': dt_ult_compra,
       'ult_preco': ult_preco,
+      'localidade': localidade,
+      'quantidade': quantidade,
+      'saida': saida,
+      'entrada': entrada
     };
   }
 
@@ -41,6 +56,11 @@ class ProdutoModel {
       DataCell(Text(nome.toString())),
       DataCell(Text(dt_ult_compra.toString())),
       DataCell(Text(ult_preco.toString())),
+      DataCell(Text(localidade.toString())),
+      DataCell(Text(quantidade.toString())),
+      DataCell(Text(saida.toString())),
+      DataCell(Text(entrada.toString())),
+
     ]);
   }
 }

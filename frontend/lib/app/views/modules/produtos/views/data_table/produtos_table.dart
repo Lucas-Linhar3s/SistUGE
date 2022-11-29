@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:advanced_datatable/advanced_datatable_source.dart';
 import 'package:advanced_datatable/datatable.dart';
 import 'package:cool_alert/cool_alert.dart';
@@ -32,6 +34,8 @@ class _HomeProdutoState extends State<HomeProduto> {
   TextEditingController controllerNome = TextEditingController();
   TextEditingController controllerUltCompra = TextEditingController();
   TextEditingController controllerUltPreco = TextEditingController();
+  TextEditingController controllerQuantidade = TextEditingController();
+  TextEditingController controllerLocalidade = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -59,7 +63,7 @@ class _HomeProdutoState extends State<HomeProduto> {
               ),
               SizedBox(height: 15),
               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Expanded(
                     child: Padding(
@@ -107,48 +111,96 @@ class _HomeProdutoState extends State<HomeProduto> {
                                 height: 20,
                               ),
                               Center(
-                                  child: Text(
-                                "Cadastrar Produto interno",
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold),
-                              )),
+                                child: Text(
+                                  "Cadastrar Produto interno",
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
                               SizedBox(
                                 height: 20,
                               ),
                               SizedBox(height: 10),
-                              Observer(builder: (_) {
-                                return TextFormField(
-                                  keyboardType: TextInputType.number,
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'O nome do produto é obrigatório!';
-                                    }
-                                    print(value);
-                                    return null;
-                                  },
-                                  controller: controllerNome,
-                                  decoration: InputDecoration(
-                                    labelText: 'Nome',
-                                    hintText: 'Insira o nome do produto',
-                                    icon: Icon(
-                                      Icons.account_box,
-                                      color: Color(0xff47afc9),
+                              Observer(
+                                builder: (_) {
+                                  return TextFormField(
+                                    keyboardType: TextInputType.number,
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'O nome do produto é obrigatório!';
+                                      }
+                                      print(value);
+                                      return null;
+                                    },
+                                    controller: controllerNome,
+                                    decoration: InputDecoration(
+                                      labelText: 'Nome',
+                                      hintText: 'Insira o nome do produto',
+                                      icon: Icon(
+                                        Icons.account_box,
+                                        color: Color(0xff47afc9),
+                                      ),
+                                      // errorText:
+                                      //     controllerTable.validatenome(),
+                                      labelStyle: TextStyle(
+                                          fontSize: 15,
+                                          color: Color(0xff47afc9)),
+                                      errorStyle: TextStyle(color: Colors.red),
+                                      border: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(5.0),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Color(0xff47afc9)),
+                                      ),
                                     ),
-                                    // errorText:
-                                    //     controllerTable.validatenome(),
-                                    labelStyle: TextStyle(
-                                        fontSize: 15, color: Color(0xff47afc9)),
-                                    errorStyle: TextStyle(color: Colors.red),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(5.0),
+                                  );
+                                },
+                              ),
+                              SizedBox(height: 10),
+                              Observer(
+                                builder: (_) {
+                                  return TextFormField(
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.digitsOnly
+                                    ],
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'A data do produto é obrigatória!';
+                                      }
+                                      print(value);
+                                      return null;
+                                    },
+                                    controller: controllerQuantidade,
+                                    // maxLength: 8,
+                                    decoration: InputDecoration(
+                                      labelText: 'Quantidade',
+                                      hintText:
+                                          'Insira a quantidade do produto',
+                                      icon: Icon(
+                                        Icons.date_range,
+                                        color: Color(0xff47afc9),
+                                      ),
+                                      // errorText:
+                                      //     controllerTable.validatenome(),
+                                      labelStyle: TextStyle(
+                                          fontSize: 15,
+                                          color: Color(0xff47afc9)),
+                                      errorStyle: TextStyle(color: Colors.red),
+                                      border: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(5.0),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Color(0xff47afc9)),
+                                      ),
                                     ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Color(0xff47afc9)),
-                                    ),
-                                  ),
-                                );
-                              }),
+                                  );
+                                },
+                              ),
                               SizedBox(height: 10),
                               Observer(
                                 builder: (_) {
@@ -192,41 +244,84 @@ class _HomeProdutoState extends State<HomeProduto> {
                                 },
                               ),
                               SizedBox(height: 10),
-                              Observer(builder: (_) {
-                                return TextFormField(
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.allow(
-                                      RegExp(r'(^\d*\.?\d*)'),
+                              Observer(
+                                builder: (_) {
+                                  return TextFormField(
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.allow(
+                                        RegExp(r'(^\d*\.?\d*)'),
+                                      ),
+                                    ],
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'Esse campo é obrigatório!';
+                                      }
+                                      print(value);
+                                      return null;
+                                    },
+                                    controller: controllerUltPreco,
+                                    decoration: InputDecoration(
+                                      labelText: 'Último preço',
+                                      hintText: 'Insira a data do último preço',
+                                      icon: Icon(
+                                        Icons.production_quantity_limits,
+                                        color: Color(0xff47afc9),
+                                      ),
+                                      labelStyle: TextStyle(
+                                          fontSize: 15,
+                                          color: Color(0xff47afc9)),
+                                      errorStyle: TextStyle(color: Colors.red),
+                                      border: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(5.0),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Color(0xff47afc9)),
+                                      ),
                                     ),
-                                  ],
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'Esse campo é obrigatório!';
-                                    }
-                                    print(value);
-                                    return null;
-                                  },
-                                  controller: controllerUltPreco,
-                                  decoration: InputDecoration(
-                                    labelText: 'Último preço',
-                                    hintText: 'Insira a data do último preço',
-                                    icon: Icon(
-                                      Icons.production_quantity_limits,
-                                      color: Color(0xff47afc9),
+                                  );
+                                },
+                              ),
+                              SizedBox(height: 10),
+                              Observer(
+                                builder: (_) {
+                                  return TextFormField(
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'A data do produto é obrigatória!';
+                                      }
+                                      print(value);
+                                      return null;
+                                    },
+                                    controller: controllerLocalidade,
+                                    // maxLength: 8,
+                                    decoration: InputDecoration(
+                                      labelText: 'Localidade',
+                                      hintText:
+                                          'Insira a localidade do produto',
+                                      icon: Icon(
+                                        Icons.date_range,
+                                        color: Color(0xff47afc9),
+                                      ),
+                                      // errorText:
+                                      //     controllerTable.validatenome(),
+                                      labelStyle: TextStyle(
+                                          fontSize: 15,
+                                          color: Color(0xff47afc9)),
+                                      errorStyle: TextStyle(color: Colors.red),
+                                      border: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(5.0),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Color(0xff47afc9)),
+                                      ),
                                     ),
-                                    labelStyle: TextStyle(
-                                        fontSize: 15, color: Color(0xff47afc9)),
-                                    errorStyle: TextStyle(color: Colors.red),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(5.0),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Color(0xff47afc9)),
-                                    ),
-                                  ),
-                                );
-                              })
+                                  );
+                                },
+                              ),
                             ],
                           ),
                         ),
@@ -288,7 +383,12 @@ class _HomeProdutoState extends State<HomeProduto> {
                 columns: [
                   DataColumn(
                     label: Text('Nome do produto'),
-                    onSort: setSort,
+                  ),
+                  DataColumn(
+                    label: Text('Quantidade'),
+                  ),
+                  DataColumn(
+                    label: Text('Localidade'),
                   ),
                   DataColumn(
                     label: Text('Última compra'),
@@ -363,7 +463,11 @@ class ExampleSource extends AdvancedDataTableSource<ProdutoModel> {
     final TableProdutoStore controllerProduto = TableProdutoStore();
     final ProdutoRepository produtoRepository = ProdutoRepository();
     final ProdutoModel produtoModel = ProdutoModel(
-        nome: 'nome', dt_ult_compra: 'dt_ult_compra', ult_preco: 'ult_preco');
+        nome: 'nome',
+        dt_ult_compra: 'dt_ult_compra',
+        ult_preco: 'ult_preco',
+        localidade: 'localidade',
+        quantidade: 'quantidade');
 
     lastDetails!.rows[index];
 
@@ -372,170 +476,173 @@ class ExampleSource extends AdvancedDataTableSource<ProdutoModel> {
         DataCell(Text("${lastDetails!.rows[index].nome}")),
         DataCell(Text("${lastDetails!.rows[index].dt_ult_compra}")),
         DataCell(Text("${lastDetails!.rows[index].ult_preco}")),
+        DataCell(Text("${lastDetails!.rows[index].localidade}")),
+        DataCell(Text("${lastDetails!.rows[index].quantidade}")),
         DataCell(
           Row(
             children: [
               Builder(
                 builder: (context) {
                   return IconButton(
-                      tooltip: "Editar",
-                      onPressed: () {
-                        controllerENome.text = lastDetails!.rows[index].nome!;
-                        controllerEDtUltCompra.text =
-                            lastDetails!.rows[index].dt_ult_compra!;
-                        controllerEUltPreco.text =
-                            lastDetails!.rows[index].ult_preco!;
+                    tooltip: "Editar",
+                    onPressed: () {
+                      controllerENome.text = lastDetails!.rows[index].nome!;
+                      controllerEDtUltCompra.text =
+                          lastDetails!.rows[index].dt_ult_compra!;
+                      controllerEUltPreco.text =
+                          lastDetails!.rows[index].ult_preco!;
 
-                        CoolAlert.show(
-                          width: 500,
-                          type: CoolAlertType.confirm,
-                          text: "Deseja mesmo editar esse produto?",
-                          title: "Atenção",
-                          cancelBtnText: "Não",
-                          backgroundColor: Color(0xff235b69),
-                          confirmBtnColor: Color(0xff235b69),
-                          confirmBtnText: "Sim, editar",
-                          context: context,
-                          widget: Form(
-                            key: _formKey,
-                            child: Column(
-                              children: [
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                TextFormField(
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'O nome do produto é obrigatório';
-                                    }
-                                    return null;
-                                  },
-                                  // initialValue: lastDetails!.rows[index].nome,
-                                  controller: controllerENome,
-                                  decoration: InputDecoration(
-                                    labelText: 'Nome do produto',
-                                    icon: Icon(
-                                      Icons.account_box,
-                                      color: Color(0xff47afc9),
-                                    ),
-                                    labelStyle: TextStyle(
-                                        fontSize: 15, color: Color(0xff47afc9)),
-                                    errorStyle: TextStyle(color: Colors.red),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(5.0),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Color(0xff47afc9)),
-                                    ),
+                      CoolAlert.show(
+                        width: 500,
+                        type: CoolAlertType.confirm,
+                        text: "Deseja mesmo editar esse produto?",
+                        title: "Atenção",
+                        cancelBtnText: "Não",
+                        backgroundColor: Color(0xff235b69),
+                        confirmBtnColor: Color(0xff235b69),
+                        confirmBtnText: "Sim, editar",
+                        context: context,
+                        widget: Form(
+                          key: _formKey,
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: 20,
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              TextFormField(
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'O nome do produto é obrigatório';
+                                  }
+                                  return null;
+                                },
+                                // initialValue: lastDetails!.rows[index].nome,
+                                controller: controllerENome,
+                                decoration: InputDecoration(
+                                  labelText: 'Nome do produto',
+                                  icon: Icon(
+                                    Icons.account_box,
+                                    color: Color(0xff47afc9),
+                                  ),
+                                  labelStyle: TextStyle(
+                                      fontSize: 15, color: Color(0xff47afc9)),
+                                  errorStyle: TextStyle(color: Colors.red),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5.0),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Color(0xff47afc9)),
                                   ),
                                 ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                TextFormField(
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'A data é obrigatória';
-                                    }
-                                    return null;
-                                  },
-                                  // initialValue: lastDetails!.rows[index].nome,
-                                  controller: controllerEDtUltCompra,
-                                  decoration: InputDecoration(
-                                    labelText: 'Data da ultima compra',
-                                    icon: Icon(
-                                      Icons.calendar_month,
-                                      color: Color(0xff47afc9),
-                                    ),
-                                    labelStyle: TextStyle(
-                                        fontSize: 15, color: Color(0xff47afc9)),
-                                    errorStyle: TextStyle(color: Colors.red),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(5.0),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Color(0xff47afc9)),
-                                    ),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              TextFormField(
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'A data é obrigatória';
+                                  }
+                                  return null;
+                                },
+                                // initialValue: lastDetails!.rows[index].nome,
+                                controller: controllerEDtUltCompra,
+                                decoration: InputDecoration(
+                                  labelText: 'Data da ultima compra',
+                                  icon: Icon(
+                                    Icons.calendar_month,
+                                    color: Color(0xff47afc9),
+                                  ),
+                                  labelStyle: TextStyle(
+                                      fontSize: 15, color: Color(0xff47afc9)),
+                                  errorStyle: TextStyle(color: Colors.red),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5.0),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Color(0xff47afc9)),
                                   ),
                                 ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                TextFormField(
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'O ultimo preço é obrigatória';
-                                    }
-                                    return null;
-                                  },
-                                  // initialValue: lastDetails!.rows[index].nome,
-                                  controller: controllerEUltPreco,
-                                  maxLength: 8,
-                                  decoration: InputDecoration(
-                                    labelText: 'Ultimo Preço',
-                                    icon: Icon(
-                                      Icons.attach_money,
-                                      color: Color(0xff47afc9),
-                                    ),
-                                    labelStyle: TextStyle(
-                                        fontSize: 15, color: Color(0xff47afc9)),
-                                    errorStyle: TextStyle(color: Colors.red),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(5.0),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Color(0xff47afc9)),
-                                    ),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              TextFormField(
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'O ultimo preço é obrigatória';
+                                  }
+                                  return null;
+                                },
+                                // initialValue: lastDetails!.rows[index].nome,
+                                controller: controllerEUltPreco,
+                                maxLength: 8,
+                                decoration: InputDecoration(
+                                  labelText: 'Ultimo Preço',
+                                  icon: Icon(
+                                    Icons.attach_money,
+                                    color: Color(0xff47afc9),
+                                  ),
+                                  labelStyle: TextStyle(
+                                      fontSize: 15, color: Color(0xff47afc9)),
+                                  errorStyle: TextStyle(color: Colors.red),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5.0),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Color(0xff47afc9)),
                                   ),
                                 ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                              ],
-                            ),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                            ],
                           ),
-                          onConfirmBtnTap: () async {
-                            if (_formKey.currentState!.validate()) {
-                              bool create = await ProdutoRepository()
-                                  .editarProduto(
-                                      lastDetails!.rows[index].id!,
-                                      controllerENome.text,
-                                      controllerEDtUltCompra.text,
-                                      controllerEUltPreco.text);
-                              if (create) {
-                                Modular.to.pop();
-                                CoolAlert.show(
-                                    width: 500,
-                                    context: context,
-                                    type: CoolAlertType.success,
-                                    backgroundColor: Color(0xff235b69),
-                                    confirmBtnColor: Color(0xff235b69),
-                                    title: "Sucesso",
-                                    text: "Perfil editado com sucesso");
-                                reloadPage();
-                              }
-                            } else {
+                        ),
+                        onConfirmBtnTap: () async {
+                          if (_formKey.currentState!.validate()) {
+                            bool create = await ProdutoRepository()
+                                .editarProduto(
+                                    lastDetails!.rows[index].id!,
+                                    controllerENome.text,
+                                    controllerEDtUltCompra.text,
+                                    controllerEUltPreco.text);
+                            if (create) {
                               Modular.to.pop();
                               CoolAlert.show(
                                   width: 500,
                                   context: context,
-                                  type: CoolAlertType.error,
-                                  title: "Falha",
-                                  text: "Ocorreu uma falha ao editar o perfil");
+                                  type: CoolAlertType.success,
+                                  backgroundColor: Color(0xff235b69),
+                                  confirmBtnColor: Color(0xff235b69),
+                                  title: "Sucesso",
+                                  text: "Perfil editado com sucesso");
+                              reloadPage();
                             }
-                          },
-                        );
-                      },
-                      icon: Icon(
-                        Icons.edit,
-                        color: Color(0xFF2b798c),
-                      ));
+                          } else {
+                            Modular.to.pop();
+                            CoolAlert.show(
+                                width: 500,
+                                context: context,
+                                type: CoolAlertType.error,
+                                title: "Falha",
+                                text: "Ocorreu uma falha ao editar o perfil");
+                          }
+                        },
+                      );
+                    },
+                    icon: Icon(
+                      Icons.edit,
+                      color: Color(0xFF2b798c),
+                    ),
+                  );
                 },
               ),
             ],
@@ -622,10 +729,6 @@ class ExampleSource extends AdvancedDataTableSource<ProdutoModel> {
 
   void reloadPage() async {
     setNextView();
-  }
-
-  void refreshPage() async {
-    reloadPage();
   }
 
   @override
