@@ -164,6 +164,7 @@ class _HomeProdutoState extends State<HomeProduto> {
                                       return null;
                                     },
                                     controller: controllerUltCompra,
+                                    // maxLength: 8,
                                     decoration: InputDecoration(
                                       labelText: 'Data da compra',
                                       hintText:
@@ -357,12 +358,12 @@ class ExampleSource extends AdvancedDataTableSource<ProdutoModel> {
     final controllerEDtUltCompra = TextEditingController();
     final controllerEUltPreco = TextEditingController();
 
-  final source = ExampleSource();
-    
+    final source = ExampleSource();
 
     final TableProdutoStore controllerProduto = TableProdutoStore();
     final ProdutoRepository produtoRepository = ProdutoRepository();
-    final ProdutoModel produtoModel = ProdutoModel();
+    final ProdutoModel produtoModel = ProdutoModel(
+        nome: 'nome', dt_ult_compra: 'dt_ult_compra', ult_preco: 'ult_preco');
 
     lastDetails!.rows[index];
 
@@ -379,9 +380,12 @@ class ExampleSource extends AdvancedDataTableSource<ProdutoModel> {
                   return IconButton(
                       tooltip: "Editar",
                       onPressed: () {
-                        controllerENome.text;
-                        controllerEDtUltCompra.text;
-                        controllerEUltPreco.text;
+                        controllerENome.text = lastDetails!.rows[index].nome!;
+                        controllerEDtUltCompra.text =
+                            lastDetails!.rows[index].dt_ult_compra!;
+                        controllerEUltPreco.text =
+                            lastDetails!.rows[index].ult_preco!;
+
                         CoolAlert.show(
                           width: 500,
                           type: CoolAlertType.confirm,
@@ -409,7 +413,7 @@ class ExampleSource extends AdvancedDataTableSource<ProdutoModel> {
                                     }
                                     return null;
                                   },
-                                  initialValue: lastDetails!.rows[index].nome,
+                                  // initialValue: lastDetails!.rows[index].nome,
                                   controller: controllerENome,
                                   decoration: InputDecoration(
                                     labelText: 'Nome do produto',
@@ -432,9 +436,100 @@ class ExampleSource extends AdvancedDataTableSource<ProdutoModel> {
                                 SizedBox(
                                   height: 20,
                                 ),
+                                TextFormField(
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'A data é obrigatória';
+                                    }
+                                    return null;
+                                  },
+                                  // initialValue: lastDetails!.rows[index].nome,
+                                  controller: controllerEDtUltCompra,
+                                  decoration: InputDecoration(
+                                    labelText: 'Data da ultima compra',
+                                    icon: Icon(
+                                      Icons.calendar_month,
+                                      color: Color(0xff47afc9),
+                                    ),
+                                    labelStyle: TextStyle(
+                                        fontSize: 15, color: Color(0xff47afc9)),
+                                    errorStyle: TextStyle(color: Colors.red),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(5.0),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Color(0xff47afc9)),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                TextFormField(
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'O ultimo preço é obrigatória';
+                                    }
+                                    return null;
+                                  },
+                                  // initialValue: lastDetails!.rows[index].nome,
+                                  controller: controllerEUltPreco,
+                                  maxLength: 8,
+                                  decoration: InputDecoration(
+                                    labelText: 'Ultimo Preço',
+                                    icon: Icon(
+                                      Icons.attach_money,
+                                      color: Color(0xff47afc9),
+                                    ),
+                                    labelStyle: TextStyle(
+                                        fontSize: 15, color: Color(0xff47afc9)),
+                                    errorStyle: TextStyle(color: Colors.red),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(5.0),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Color(0xff47afc9)),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
                               ],
                             ),
                           ),
+                          onConfirmBtnTap: () async {
+                            if (_formKey.currentState!.validate()) {
+                              bool create = await ProdutoRepository()
+                                  .editarProduto(
+                                      lastDetails!.rows[index].id!,
+                                      controllerENome.text,
+                                      controllerEDtUltCompra.text,
+                                      controllerEUltPreco.text);
+                              if (create) {
+                                Modular.to.pop();
+                                CoolAlert.show(
+                                    width: 500,
+                                    context: context,
+                                    type: CoolAlertType.success,
+                                    backgroundColor: Color(0xff235b69),
+                                    confirmBtnColor: Color(0xff235b69),
+                                    title: "Sucesso",
+                                    text: "Perfil editado com sucesso");
+                                reloadPage();
+                              }
+                            } else {
+                              Modular.to.pop();
+                              CoolAlert.show(
+                                  width: 500,
+                                  context: context,
+                                  type: CoolAlertType.error,
+                                  title: "Falha",
+                                  text: "Ocorreu uma falha ao editar o perfil");
+                            }
+                          },
                         );
                       },
                       icon: Icon(
@@ -465,18 +560,30 @@ class ExampleSource extends AdvancedDataTableSource<ProdutoModel> {
                           confirmBtnText: "Sim, excluir",
                           confirmBtnColor: Color(0xff235b69),
                           onConfirmBtnTap: () async {
-                            CoolAlert.show(
-                                width: 500,
-                                context: context,
-                                type: CoolAlertType.success,
-                                backgroundColor: Color(0xff235b69),
-                                confirmBtnColor: Color(0xff235b69),
-                                title: "Sucesso",
-                                text: "Produto excluído com sucesso");
-                            final id = lastDetails!.rows[index].id;
-                            produtoRepository.excluirProduto(id!);
-                            source.reloadPage();
-                            Modular.to.pop('/home/produtos');
+                            bool delete = await ProdutoRepository()
+                                .excluirProduto(lastDetails!.rows[index].id!);
+
+                            if (delete) {
+                              Modular.to.pop();
+                              CoolAlert.show(
+                                  width: 500,
+                                  context: context,
+                                  type: CoolAlertType.success,
+                                  backgroundColor: Color(0xff235b69),
+                                  confirmBtnColor: Color(0xff235b69),
+                                  title: "Sucesso",
+                                  text: "Produto excluído com sucesso");
+
+                              reloadPage();
+                            } else {
+                              Modular.to.pop();
+                              CoolAlert.show(
+                                  width: 500,
+                                  context: context,
+                                  type: CoolAlertType.error,
+                                  title: "Falha",
+                                  text: "Ocorreu uma falha ao excluir produto");
+                            }
                           },
                           onCancelBtnTap: () {
                             Modular.to.pop();
@@ -546,9 +653,10 @@ class ExampleSource extends AdvancedDataTableSource<ProdutoModel> {
         },
       ),
     );
+    print(response.data['Produtos'].first["count"]);
+    print(response.data['Produtos']);
     if (response.statusCode == 200) {
       final data = response.data;
-      print(data['Produtos'].first["count"]);
       return RemoteDataSourceDetails(
         int.parse(data['Produtos'].first["count"].toString()),
         (data['Produtos'] as List<dynamic>)

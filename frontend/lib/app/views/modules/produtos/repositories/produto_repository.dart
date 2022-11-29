@@ -81,11 +81,25 @@ class ProdutoRepository implements ProdutoInterface {
   Future<bool> editarProduto(
       int id, String nome, String dataUltCompra, String ultPreco) async {
     bool success = false;
+    SharedPreferences _sharedPreferences =
+        await SharedPreferences.getInstance();
 
+    var tokenCreate = await _sharedPreferences.getString('token');
     var data = ProdutoModel(
-        nome: nome, dt_ult_compra: dataUltCompra, ult_preco: ultPreco, id: id);
+        nome: nome, dt_ult_compra: dataUltCompra, ult_preco: ultPreco);
 
-    final apiResponse = await _dio.patch('http://localhost:3333/produtos');
+    final apiResponse = await _dio.put(
+      'http://localhost:3333/produtos/${id}',
+      data: data.toJson(),
+      options: Options(
+        validateStatus: (_) => true,
+        contentType: Headers.jsonContentType,
+        responseType: ResponseType.json,
+        headers: {
+          'authorization': 'Bearer $tokenCreate',
+        },
+      ),
+    );
 
     if (apiResponse.statusCode == 200) {
       success = true;
@@ -103,7 +117,9 @@ class ProdutoRepository implements ProdutoInterface {
     var tokenCreate = await _sharedPreferences.getString('token');
     bool success = false;
 
-    ProdutoModel produtoModel = ProdutoModel(id: id);
+    ProdutoModel produtoModel = ProdutoModel(
+      id: id,
+    );
 
     final apiResponse = await _dio.delete(
       'http://localhost:3333/produtos/$id',

@@ -38,7 +38,7 @@ class ProdutoModel {
     List<String> selectedIds,
   ) {
     return DataRow(cells: [
-      DataCell(Text(nome!)),
+      DataCell(Text(nome.toString())),
       DataCell(Text(dt_ult_compra.toString())),
       DataCell(Text(ult_preco.toString())),
     ]);
