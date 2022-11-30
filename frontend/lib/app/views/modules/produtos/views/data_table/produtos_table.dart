@@ -527,7 +527,6 @@ class ExampleSource extends AdvancedDataTableSource<ProdutoModel> {
                                   }
                                   return null;
                                 },
-                                // initialValue: lastDetails!.rows[index].nome,
                                 controller: controllerENome,
                                 decoration: InputDecoration(
                                   labelText: 'Nome do produto',
@@ -550,66 +549,64 @@ class ExampleSource extends AdvancedDataTableSource<ProdutoModel> {
                               SizedBox(
                                 height: 20,
                               ), 
-                              TextFormField(
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'O nome do produto é obrigatório';
-                                  }
-                                  return null;
-                                },
-                                // initialValue: lastDetails!.rows[index].nome,
-                                controller: controllerEQuantidade,
-                                decoration: InputDecoration(
-                                  labelText: 'Quantidade',
-                                  icon: Icon(
-                                    Icons.account_box,
-                                    color: Color(0xff47afc9),
-                                  ),
-                                  labelStyle: TextStyle(
-                                      fontSize: 15, color: Color(0xff47afc9)),
-                                  errorStyle: TextStyle(color: Colors.red),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(5.0),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Color(0xff47afc9)),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              TextFormField(
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'O nome do produto é obrigatório';
-                                  }
-                                  return null;
-                                },
-                                // initialValue: lastDetails!.rows[index].nome,
-                                controller: controllerELocalidade,
-                                decoration: InputDecoration(
-                                  labelText: 'Localidade',
-                                  icon: Icon(
-                                    Icons.place,
-                                    color: Color(0xff47afc9),
-                                  ),
-                                  labelStyle: TextStyle(
-                                      fontSize: 15, color: Color(0xff47afc9)),
-                                  errorStyle: TextStyle(color: Colors.red),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(5.0),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Color(0xff47afc9)),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
+                              // TextFormField(
+                              //   validator: (value) {
+                              //     if (value == null || value.isEmpty) {
+                              //       return 'O nome do produto é obrigatório';
+                              //     }
+                              //     return null;
+                              //   },
+                              //   controller: controllerEQuantidade,
+                              //   decoration: InputDecoration(
+                              //     labelText: 'Quantidade',
+                              //     icon: Icon(
+                              //       Icons.account_box,
+                              //       color: Color(0xff47afc9),
+                              //     ),
+                              //     labelStyle: TextStyle(
+                              //         fontSize: 15, color: Color(0xff47afc9)),
+                              //     errorStyle: TextStyle(color: Colors.red),
+                              //     border: OutlineInputBorder(
+                              //       borderRadius: BorderRadius.circular(5.0),
+                              //     ),
+                              //     focusedBorder: OutlineInputBorder(
+                              //       borderSide:
+                              //           BorderSide(color: Color(0xff47afc9)),
+                              //     ),
+                              //   ),
+                              // ),
+                              // SizedBox(
+                              //   height: 20,
+                              // ),
+                              // TextFormField(
+                              //   validator: (value) {
+                              //     if (value == null || value.isEmpty) {
+                              //       return 'O nome do produto é obrigatório';
+                              //     }
+                              //     return null;
+                              //   },
+                              //   controller: controllerELocalidade,
+                              //   decoration: InputDecoration(
+                              //     labelText: 'Localidade',
+                              //     icon: Icon(
+                              //       Icons.place,
+                              //       color: Color(0xff47afc9),
+                              //     ),
+                              //     labelStyle: TextStyle(
+                              //         fontSize: 15, color: Color(0xff47afc9)),
+                              //     errorStyle: TextStyle(color: Colors.red),
+                              //     border: OutlineInputBorder(
+                              //       borderRadius: BorderRadius.circular(5.0),
+                              //     ),
+                              //     focusedBorder: OutlineInputBorder(
+                              //       borderSide:
+                              //           BorderSide(color: Color(0xff47afc9)),
+                              //     ),
+                              //   ),
+                              // ),
+                              // SizedBox(
+                              //   height: 20,
+                              // ),
                               TextFormField(
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
@@ -695,7 +692,7 @@ class ExampleSource extends AdvancedDataTableSource<ProdutoModel> {
                                   backgroundColor: Color(0xff235b69),
                                   confirmBtnColor: Color(0xff235b69),
                                   title: "Sucesso",
-                                  text: "Perfil editado com sucesso");
+                                  text: "Produto editado com sucesso");
                               reloadPage();
                             }
                           } else {

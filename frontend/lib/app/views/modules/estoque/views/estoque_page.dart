@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:advanced_datatable/advanced_datatable_source.dart';
 import 'package:advanced_datatable/datatable.dart';
 import 'package:cool_alert/cool_alert.dart';
@@ -472,7 +474,6 @@ class ExampleSource extends AdvancedDataTableSource<ProdutoModel> {
                                   }
                                   return null;
                                 },
-                                // initialValue: lastDetails!.rows[index].nome,
                                 controller: controllerENome,
                                 decoration: InputDecoration(
                                   labelText: 'Nome do produto',
@@ -502,7 +503,6 @@ class ExampleSource extends AdvancedDataTableSource<ProdutoModel> {
                                   }
                                   return null;
                                 },
-                                // initialValue: lastDetails!.rows[index].nome,
                                 controller: controllerEDtUltCompra,
                                 decoration: InputDecoration(
                                   labelText: 'Data da ultima compra',
@@ -581,7 +581,7 @@ class ExampleSource extends AdvancedDataTableSource<ProdutoModel> {
                                   backgroundColor: Color(0xff235b69),
                                   confirmBtnColor: Color(0xff235b69),
                                   title: "Sucesso",
-                                  text: "Perfil editado com sucesso");
+                                  text: "Produto editado com sucesso");
                               reloadPage();
                             }
                           } else {

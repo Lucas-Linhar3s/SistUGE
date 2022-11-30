@@ -1,4 +1,4 @@
-// ignore_for_file: body_might_complete_normally_nullable
+// ignore_for_file: body_might_complete_normally_nullable, unused_local_variable
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
