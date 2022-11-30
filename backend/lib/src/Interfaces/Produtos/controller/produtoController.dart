@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:backend/src/Interfaces/Auth/authResources.dart';
+import 'package:backend/src/Interfaces/Estoque/viewModels/modelEstoque.dart';
 import 'package:backend/src/Interfaces/Produtos/repository/produtoRepository.dart';
 import 'package:backend/src/Interfaces/Produtos/viewModels/modelProdutos.dart';
 import 'package:backend/src/Interfaces/Produtos/viewModels/queryParams.dart';
@@ -22,12 +23,9 @@ class IProdutoController extends Resource {
       ];
 
   Future<Response> _criarProduto(ModularArguments req) async {
-    ModelProdutos produtos = ModelProdutos(
-      nome: req.data['nome'],
-      dt_ult_compra: req.data['dt_ult_compra'],
-      ult_preco: req.data['ult_preco'],
-    );
-    int result = _repository.criarProdutos(produtos);
+    ModelProdutos produtos = ModelProdutos.fromRequest(req.data);
+    ModelEstoque estoque = ModelEstoque.fromRequest(req.data);
+    int result = _repository.criarProdutos(produtos, estoque);
     if (result != 0) {
       final map = {
         'Sucesso': ['Produto criado com sucesso! id: $result']

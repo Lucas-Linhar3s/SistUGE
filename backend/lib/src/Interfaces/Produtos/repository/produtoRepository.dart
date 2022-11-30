@@ -1,3 +1,4 @@
+import 'package:backend/src/Interfaces/Estoque/viewModels/modelEstoque.dart';
 import 'package:backend/src/Interfaces/Produtos/viewModels/modelProdutos.dart';
 import 'package:backend/src/Interfaces/Produtos/viewModels/queryParams.dart';
 import 'package:backend/src/Services/Database/sqlite.dart';
@@ -6,13 +7,24 @@ import 'package:sqlite3/sqlite3.dart';
 class IProdutosRepo {
   final _db = ConfigDB().Sqlite();
 
-  int criarProdutos(ModelProdutos produtos) {
-    PreparedStatement query = _db.prepare(
+  int criarProdutos(ModelProdutos produtos, ModelEstoque estoque) {
+    PreparedStatement queryProdutos = _db.prepare(
         'INSERT INTO produtos(nome,dt_ult_compra,ult_preco) VALUES(?,?,?);');
-
-    query.execute([produtos.nome, produtos.dt_ult_compra, produtos.ult_preco]);
+    queryProdutos
+        .execute([produtos.nome, produtos.dt_ult_compra, produtos.ult_preco]);
     final lastID = _db.lastInsertRowId;
-    query.dispose();
+    DateTime data_At = DateTime.now();
+    String dt_entrada = "${data_At.day}/${data_At.month}/${data_At.year}";
+    PreparedStatement queryEstoque = _db.prepare(
+        'INSERT INTO estoque(localidade, dt_entrada, quantidade, id_produto) VALUES(?,?,?,?);');
+    queryEstoque.execute([
+      estoque.localidade,
+      dt_entrada,
+      estoque.quantidade,
+      lastID,
+    ]);
+    queryProdutos.dispose();
+    queryEstoque.dispose();
     return lastID;
   }
 
@@ -30,13 +42,18 @@ class IProdutosRepo {
     ResultSet query = _db.select(
       '''
         SELECT 
-          *, COUNT(*) OVER() AS count 
-        FROM produtos 
+          produtos.nome, 
+          estoque.quantidade, 
+          estoque.localidade, 
+          produtos.dt_ult_compra, 
+          produtos.ult_preco, 
+          COUNT(*) OVER() AS count 
+        FROM produtos, estoque
         WHERE
           CASE
             WHEN nome = '' THEN true
             ELSE nome LIKE '%' || ? || '%'
-          END
+          END AND produtos.id = estoque.id_produto
         LIMIT ? OFFSET ?;''',
       [params.nome, params.limite, params.offset],
     );
