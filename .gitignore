@@ -4,6 +4,7 @@
 .dart_tool/
 .packages
 build/
+backend/lib/src/Services/Database/table_sqlite.db
 # If you're building an application, you may want to check-in your pubspec.lock
 pubspec.lock
 

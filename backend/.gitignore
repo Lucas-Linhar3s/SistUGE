@@ -1,7 +1,7 @@
 # Files and directories created by pub.
 .dart_tool/
 .packages
-
+lib/src/Services/Database/table_sqlite.db
 # Conventional directory for build outputs.
 build/
 lib/src/Services/Database/
