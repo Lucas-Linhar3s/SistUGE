@@ -55,18 +55,6 @@ class IProdutoController extends Resource {
     return Response(404, body: jsonEncode(map));
   }
 
-  // Future<Response> _getOneProduct(ModularArguments req) async {
-  //   int id = int.parse(req.params['id']);
-  //   final result = _repository.getOneProduct(id);
-  //   final s = result.map((e) => e).first;
-  //   print(s);
-  //   if (result.isEmpty == false) {
-  //     return Response(200, body: jsonEncode(result), headers: _jsonEncode);
-  //   }
-  //   final map = {'error': 'Erro ao buscar produtos com id: $id!'};
-  //   return Response(404, body: jsonEncode(map), headers: _jsonEncode);
-  // }
-
   Future<Response> _atualizarProduto(ModularArguments req) async {
     ModelProdutos produto = ModelProdutos(
       id: int.parse(req.params['id']),
@@ -74,7 +62,8 @@ class IProdutoController extends Resource {
       dt_ult_compra: req.data['dt_ult_compra'],
       ult_preco: req.data['ult_preco'],
     );
-    int result = _repository.atualizarProduto(produto);
+    ModelEstoque estoque = ModelEstoque.fromRequest(req.data);
+    int result = _repository.atualizarProduto(produto, estoque);
     if (result != 0) {
       final map = {
         'Sucesso': ['Produto com id: ${produto.id} foi atualizado com sucesso!']

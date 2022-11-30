@@ -28,12 +28,6 @@ class IProdutosRepo {
     return lastID;
   }
 
-  // ResultSet getOneProduct(int id) {
-  //   final query =
-  //       _db.select('SELECT id, nome, senha FROM usuario  WHERE id=?', [id]);
-  //   return query;
-  // }
-
   ResultSet buscarProdutos(Params params) {
     // ResultSet query = _db.select(
     //     'SELECT * FROM produtos ORDER BY id LIMIT ? OFFSET ?;',
@@ -60,17 +54,23 @@ class IProdutosRepo {
     return query;
   }
 
-  int atualizarProduto(ModelProdutos produtos) {
-    PreparedStatement query = _db.prepare(
+  int atualizarProduto(ModelProdutos produtos, ModelEstoque estoque) {
+    PreparedStatement queryProdutos = _db.prepare(
         'UPDATE produtos SET nome=?, dt_ult_compra=?, ult_preco=? WHERE id=?');
-    query.execute([
+    queryProdutos.execute([
       produtos.nome,
       produtos.dt_ult_compra,
       produtos.ult_preco,
       produtos.id,
     ]);
     final result = _db.getUpdatedRows();
-    query.dispose();
+    DateTime data_At = DateTime.now();
+    String dt_saida = "${data_At.day}/${data_At.month}/${data_At.year}";
+    PreparedStatement queryEstoque = _db.prepare(
+        'UPDATE estoque SET dt_saida=?, quantidade=? WHERE id_produto=?');
+    queryEstoque.execute([dt_saida, estoque.quantidade, produtos.id]);
+    queryProdutos.dispose();
+    queryEstoque.dispose();
     return result;
   }
 
