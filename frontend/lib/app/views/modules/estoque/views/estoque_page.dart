@@ -13,7 +13,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../produtos/models/produto_model.dart';
 import '../../produtos/repositories/produto_repository.dart';
 import '../../produtos/stores/product_store.dart';
-import '../../produtos/views/data_table/produtos_table.dart';
 
 class EstoquePage extends StatefulWidget {
   const EstoquePage({super.key});
@@ -31,7 +30,10 @@ class _EstoquePageState extends State<EstoquePage> {
   final _formKey = GlobalKey<FormState>();
 
   TextEditingController controllerEsNome = TextEditingController();
+  TextEditingController controllerEsQuantidade = TextEditingController();
   TextEditingController controllerEsLocalidade = TextEditingController();
+  TextEditingController controllerEsUltCompra = TextEditingController();
+  TextEditingController controllerEsUltPreco = TextEditingController();
   TextEditingController controllerEsDtEntrada = TextEditingController();
   TextEditingController controllerEsDtSaida = TextEditingController();
 
@@ -150,7 +152,6 @@ class _EstoquePageState extends State<EstoquePage> {
                                     if (value == null || value.isEmpty) {
                                       return 'A localidade do produto é obrigatória!';
                                     }
-                                    print(value);
                                     return null;
                                   },
                                   controller: controllerEsNome,
@@ -259,6 +260,10 @@ class _EstoquePageState extends State<EstoquePage> {
                           if (_formKey.currentState!.validate()) {
                             bool create = await tableController.createProduct(
                               controllerEsNome.text,
+                              controllerEsQuantidade.text,
+                              controllerEsLocalidade.text,
+                              controllerEsUltCompra.text,
+                              controllerEsUltPreco.text,
                               controllerEsDtEntrada.text,
                               controllerEsDtSaida.text,
                             );
@@ -389,7 +394,6 @@ class _EstoquePageState extends State<EstoquePage> {
 typedef SelectedCallBack = Function(String id, bool newSelectState);
 
 class ExampleSource extends AdvancedDataTableSource<ProdutoModel> {
-  
   List<String> selectedIds = [];
   String lastSearchTerm = '';
 
@@ -398,8 +402,12 @@ class ExampleSource extends AdvancedDataTableSource<ProdutoModel> {
   @override
   DataRow getRow(int index) {
     final controllerENome = TextEditingController();
+    final controllerEQuantidade = TextEditingController();
+    final controllerELocalidade = TextEditingController();
     final controllerEDtUltCompra = TextEditingController();
     final controllerEUltPreco = TextEditingController();
+    final controllerEEntrada = TextEditingController();
+    final controllerESaida = TextEditingController();
 
     final source = ExampleSource();
 
@@ -557,8 +565,13 @@ class ExampleSource extends AdvancedDataTableSource<ProdutoModel> {
                                 .editarProduto(
                                     lastDetails!.rows[index].id!,
                                     controllerENome.text,
+                                    controllerEQuantidade.text,
+                                    controllerELocalidade.text,
                                     controllerEDtUltCompra.text,
-                                    controllerEUltPreco.text);
+                                    controllerEUltPreco.text,
+                                    controllerEEntrada.text,
+                                    controllerESaida.text
+                                    );
                             if (create) {
                               Modular.to.pop();
                               CoolAlert.show(
@@ -666,7 +679,7 @@ class ExampleSource extends AdvancedDataTableSource<ProdutoModel> {
 
   @override
   Future<RemoteDataSourceDetails<ProdutoModel>> getNextPage(
-     NextPageRequest pageRequest) async {
+      NextPageRequest pageRequest) async {
     SharedPreferences _sharedPreferences =
         await SharedPreferences.getInstance();
 
@@ -689,8 +702,6 @@ class ExampleSource extends AdvancedDataTableSource<ProdutoModel> {
         },
       ),
     );
-    print(response.data['Produtos'].first["count"]);
-    print(response.data['Produtos']);
     if (response.statusCode == 200) {
       final data = response.data;
       return RemoteDataSourceDetails(
@@ -706,7 +717,7 @@ class ExampleSource extends AdvancedDataTableSource<ProdutoModel> {
       throw Exception('ERROOOOORRRR');
     }
   }
-  
+
   @override
   int get selectedRowCount => selectedIds.length;
-  }
+}

@@ -38,9 +38,15 @@ mixin _$TableProdutoStore on _TableProdutoStoreBase, Store {
 
   @override
   Future<bool> createProduct(
-      dynamic nome, dynamic dataUltCompra, dynamic ultPreco) {
-    return _$createProductAsyncAction
-        .run(() => super.createProduct(nome, dataUltCompra, ultPreco));
+      dynamic nome,
+      dynamic quantidade,
+      dynamic localidade,
+      dynamic dataUltCompra,
+      dynamic ultPreco,
+      dynamic entrada,
+      dynamic saida) {
+    return _$createProductAsyncAction.run(() => super.createProduct(
+        nome, quantidade, localidade, dataUltCompra, ultPreco, entrada, saida));
   }
 
   @override

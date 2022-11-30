@@ -31,10 +31,11 @@ class UserSheetsApi {
       final primeiraLinha = ProductFields.getFields();
       _userSheet!.values.insertRow(1, primeiraLinha);
     } catch (e) {
-      print('Erro no init: $e');
     }
   }
-
+  
+  final todosDados = ProductFields.getFields();
+  // _userSheet!.values.insertColumn(i);
   static Future<Worksheet> _getWorkSheet(
     Spreadsheet spreadsheet, {
     required String title,

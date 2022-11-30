@@ -294,9 +294,6 @@ class _LoginPageState extends State<LoginPage> {
       String token = response.data['accessToken'].first;
       await _sharedPreferences.setString('token', '$token');
       var log = await _sharedPreferences.get('token');
-      print(log);
     }
-    // print(response.statusCode);
-    // print(response.data['accessToken'].first);
   }
 }

@@ -5,33 +5,33 @@ import '../views/data_table/produtos_table.dart';
 class ProdutoModel {
   int? id;
   String? nome;
+  String? quantidade;
+  String? localidade;
   String? dt_ult_compra;
   String? ult_preco;
-  String? localidade;
-  String? quantidade;
-  String? saida;
   String? entrada;
+  String? saida;
 
   ProdutoModel(
       {this.id,
       this.nome,
+      this.quantidade,
+      this.localidade,
       this.dt_ult_compra,
       this.ult_preco,
-      this.localidade,
-      this.quantidade,
-      this.saida,
-      this.entrada});
+      this.entrada,
+      this.saida,});
 
   factory ProdutoModel.fromJson(Map<String, dynamic> json) {
     return ProdutoModel(
       id: json["id"],
       nome: json['nome'],
+      quantidade: json['quantidade'],
+      localidade: json['localidade'],
       dt_ult_compra: json['dt_ult_compra'],
       ult_preco: json['ult_preco'],
-      localidade: json['localidade'],
-      quantidade: json['quantidade'],
-      saida: json['saida'],
       entrada: json['entrada'],
+      saida: json['saida'],
     );
   }
 
@@ -39,12 +39,12 @@ class ProdutoModel {
     return {
       'id': id,
       'nome': nome,
+      'quantidade': quantidade,
+      'localidade': localidade,
       'dt_ult_compra': dt_ult_compra,
       'ult_preco': ult_preco,
-      'localidade': localidade,
-      'quantidade': quantidade,
+      'entrada': entrada,
       'saida': saida,
-      'entrada': entrada
     };
   }
 
@@ -54,12 +54,12 @@ class ProdutoModel {
   ) {
     return DataRow(cells: [
       DataCell(Text(nome.toString())),
+      DataCell(Text(quantidade.toString())),
+      DataCell(Text(localidade.toString())),
       DataCell(Text(dt_ult_compra.toString())),
       DataCell(Text(ult_preco.toString())),
-      DataCell(Text(localidade.toString())),
-      DataCell(Text(quantidade.toString())),
-      DataCell(Text(saida.toString())),
       DataCell(Text(entrada.toString())),
+      DataCell(Text(saida.toString())),
 
     ]);
   }

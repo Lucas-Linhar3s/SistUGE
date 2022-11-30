@@ -14,7 +14,6 @@ class UsuarioRepository implements UsuarioInterface{
 
     final apiResponse = await _dio.post('http://localhost:3333/usuarios',
         data: usuarioModel.toJson());
-    print(apiResponse.data);
 
     if (apiResponse.statusCode == 201) {
       success = true;

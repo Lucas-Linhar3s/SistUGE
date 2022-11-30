@@ -11,8 +11,12 @@ abstract class _TableProdutoStoreBase with Store {
 
   @observable
   String nome = '';
+  String quantidade = '';
+  String localidade = '';
   String dataUltCompra = '';
   String ultPreco = '';
+  String entrada = '';
+  String saida = '';
 
   String? validateName() {
     if (nome.isEmpty) {
@@ -27,11 +31,11 @@ abstract class _TableProdutoStoreBase with Store {
   }
 
   @action
-  Future<bool> createProduct(nome, dataUltCompra, ultPreco) async {
+  Future<bool> createProduct(nome, quantidade, localidade, dataUltCompra, ultPreco, entrada, saida) async {
     bool success = false;
     try {
       var res = await produtoRepository.cadastrarProduto(
-          nome, dataUltCompra, ultPreco);
+          nome, quantidade, localidade, dataUltCompra, ultPreco, entrada, saida);
       success = true;
       return res;
     } on DioError catch (err) {

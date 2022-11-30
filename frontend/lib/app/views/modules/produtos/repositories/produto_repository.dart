@@ -17,13 +17,25 @@ class ProdutoRepository implements ProdutoInterface {
 
   @override
   Future<bool> cadastrarProduto(
-      String nome, String dataUltCompra, String ultPreco) async {
+      String nome,
+      String quantidade,
+      String localidade,
+      String dataUltCompra,
+      String ultPreco,
+      String entrada,
+      String saida) async {
     SharedPreferences _sharedPreferences =
         await SharedPreferences.getInstance();
     bool success = true;
     var tokenCreate = await _sharedPreferences.getString('token');
     ProdutoModel produtoModel = ProdutoModel(
-        nome: nome, dt_ult_compra: dataUltCompra, ult_preco: ultPreco);
+        nome: nome,
+        quantidade: quantidade,
+        localidade: localidade,
+        dt_ult_compra: dataUltCompra,
+        ult_preco: ultPreco,
+        entrada: entrada,
+        saida: saida);
     final apiResponse = await _dio.post(
       'http://localhost:3333/produtos',
       data: produtoModel.toJson(),
@@ -36,8 +48,6 @@ class ProdutoRepository implements ProdutoInterface {
         },
       ),
     );
-
-    print(apiResponse.data);
 
     if (apiResponse.statusCode == 201) {
       success = true;
@@ -71,7 +81,6 @@ class ProdutoRepository implements ProdutoInterface {
     if (apiResponse.statusCode == 200) {
       var pp = apiResponse.data["result"] as List;
 
-      print(jsonEncode(apiResponse.data));
       produtos = pp.map((json) => ProdutoModel.fromJson(json)).toList();
     } else {
       produtos = [];
@@ -81,7 +90,14 @@ class ProdutoRepository implements ProdutoInterface {
 
   @override
   Future<bool> editarProduto(
-      int id, String nome, String dataUltCompra, String ultPreco) async {
+      int id,
+      String nome,
+      String quantidade,
+      String localidade,
+      String dataUltCompra,
+      String ultPreco,
+      String entrada,
+      String saida) async {
     bool success = false;
     SharedPreferences _sharedPreferences =
         await SharedPreferences.getInstance();
@@ -137,7 +153,6 @@ class ProdutoRepository implements ProdutoInterface {
     );
 
     if (apiResponse.statusCode == 200) {
-      print(apiResponse.data);
       success = true;
     } else {
       success = false;
