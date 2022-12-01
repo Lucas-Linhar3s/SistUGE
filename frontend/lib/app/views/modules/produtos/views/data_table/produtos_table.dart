@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 
 import '../../models/produto_model.dart';
 
@@ -34,8 +35,14 @@ class _HomeProdutoState extends State<HomeProduto> {
   TextEditingController controllerNome = TextEditingController();
   TextEditingController controllerLocalidade = TextEditingController();
   TextEditingController controllerQuantidade = TextEditingController();
-  TextEditingController controllerUltCompra = TextEditingController();
-  TextEditingController controllerUltPreco = TextEditingController();
+  MaskedTextController controllerUltCompra = MaskedTextController(
+    mask: '00/00/0000',
+  );
+  MoneyMaskedTextController controllerUltPreco = MoneyMaskedTextController(
+    leftSymbol: r'R$',
+    decimalSeparator: ',',
+    thousandSeparator: '.',
+  );
   TextEditingController controllerEntrada = TextEditingController();
   TextEditingController controllerSaida = TextEditingController();
 
@@ -93,7 +100,7 @@ class _HomeProdutoState extends State<HomeProduto> {
                     icon: Icon(Icons.search),
                   ),
                   ElevatedButton(
-                    child: Text("Cadastrar Produtos "),
+                    child: Text("Cadastrar Produtos"),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color.fromARGB(255, 76, 175, 80),
                     ),
@@ -205,20 +212,20 @@ class _HomeProdutoState extends State<HomeProduto> {
                               Observer(
                                 builder: (_) {
                                   return TextFormField(
+                                    keyboardType: TextInputType.number,
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
-                                        return 'A data do produto é obrigatória!';
+                                        return 'O nome do produto é obrigatório!';
                                       }
                                       return null;
                                     },
                                     controller: controllerLocalidade,
-                                    // maxLength: 8,
                                     decoration: InputDecoration(
                                       labelText: 'Localidade',
                                       hintText:
                                           'Insira a localidade do produto',
                                       icon: Icon(
-                                        Icons.place,
+                                        Icons.account_box,
                                         color: Color(0xff47afc9),
                                       ),
                                       // errorText:
@@ -244,7 +251,7 @@ class _HomeProdutoState extends State<HomeProduto> {
                                 builder: (_) {
                                   return TextFormField(
                                     inputFormatters: [
-                                      FilteringTextInputFormatter.digitsOnly
+                                      FilteringTextInputFormatter.digitsOnly,
                                     ],
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
@@ -285,9 +292,7 @@ class _HomeProdutoState extends State<HomeProduto> {
                                 builder: (_) {
                                   return TextFormField(
                                     inputFormatters: [
-                                      FilteringTextInputFormatter.allow(
-                                        RegExp(r'(^\d*\.?\d*)'),
-                                      ),
+                                      FilteringTextInputFormatter.digitsOnly,
                                     ],
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
@@ -388,12 +393,6 @@ class _HomeProdutoState extends State<HomeProduto> {
                     label: Text('Nome do produto'),
                   ),
                   DataColumn(
-                    label: Text('Quantidade'),
-                  ),
-                  DataColumn(
-                    label: Text('Localidade'),
-                  ),
-                  DataColumn(
                     label: Text('Última compra'),
                   ),
                   DataColumn(
@@ -483,8 +482,6 @@ class ExampleSource extends AdvancedDataTableSource<ProdutoModel> {
     return DataRow(
       cells: [
         DataCell(Text("${lastDetails!.rows[index].nome}")),
-        DataCell(Text("${lastDetails!.rows[index].quantidade}")),
-        DataCell(Text("${lastDetails!.rows[index].localidade}")),
         DataCell(Text("${lastDetails!.rows[index].dt_ult_compra}")),
         DataCell(Text("${lastDetails!.rows[index].ult_preco}")),
         DataCell(
@@ -548,7 +545,7 @@ class ExampleSource extends AdvancedDataTableSource<ProdutoModel> {
                               ),
                               SizedBox(
                                 height: 20,
-                              ), 
+                              ),
                               // TextFormField(
                               //   validator: (value) {
                               //     if (value == null || value.isEmpty) {

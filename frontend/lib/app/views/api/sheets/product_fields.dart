@@ -12,6 +12,6 @@ class ProductFields {
   static List<String> getFields() => [id, name, quantidade, localidade, dt_ult_compra, ult_preco, dt_entrada, dt_saida];
 
   // static List<dynamic> exportData() {
-
+    
   // }
  }
