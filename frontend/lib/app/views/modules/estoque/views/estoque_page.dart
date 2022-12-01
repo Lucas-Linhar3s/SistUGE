@@ -570,8 +570,7 @@ class ExampleSource extends AdvancedDataTableSource<ProdutoModel> {
                                     controllerEDtUltCompra.text,
                                     controllerEUltPreco.text,
                                     controllerEEntrada.text,
-                                    controllerESaida.text
-                                    );
+                                    controllerESaida.text);
                             if (create) {
                               Modular.to.pop();
                               CoolAlert.show(
@@ -627,7 +626,7 @@ class ExampleSource extends AdvancedDataTableSource<ProdutoModel> {
                           onConfirmBtnTap: () async {
                             bool delete = await ProdutoRepository()
                                 .excluirProduto(lastDetails!.rows[index].id!);
-
+                            print(lastDetails!.rows[index].id);
                             if (delete) {
                               Modular.to.pop();
                               CoolAlert.show(

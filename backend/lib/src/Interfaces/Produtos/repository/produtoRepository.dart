@@ -36,11 +36,14 @@ class IProdutosRepo {
     ResultSet query = _db.select(
       '''
         SELECT 
-          produtos.nome, 
-          estoque.quantidade, 
-          estoque.localidade, 
+          produtos.id,
+          produtos.nome,
           produtos.dt_ult_compra, 
           produtos.ult_preco, 
+          estoque.quantidade, 
+          estoque.localidade, 
+          estoque.dt_entrada,
+          estoque.dt_saida, 
           COUNT(*) OVER() AS count 
         FROM produtos, estoque
         WHERE
