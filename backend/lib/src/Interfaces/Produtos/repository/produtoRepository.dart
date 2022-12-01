@@ -58,6 +58,9 @@ class IProdutosRepo {
   }
 
   int atualizarProduto(ModelProdutos produtos, ModelEstoque estoque) {
+    ResultSet selectProdutos = _db.select(
+        'SELECT quantidade FROM estoque WHERE id_produto=?;', [produtos.id]);
+    print(selectProdutos.first['quantidade']);
     PreparedStatement queryProdutos = _db.prepare(
         'UPDATE produtos SET nome=?, dt_ult_compra=?, ult_preco=? WHERE id=?');
     queryProdutos.execute([
@@ -67,13 +70,16 @@ class IProdutosRepo {
       produtos.id,
     ]);
     final result = _db.getUpdatedRows();
-    DateTime data_At = DateTime.now();
-    String dt_saida = "${data_At.day}/${data_At.month}/${data_At.year}";
-    PreparedStatement queryEstoque = _db.prepare(
-        'UPDATE estoque SET dt_saida=?, quantidade=? WHERE id_produto=?');
-    queryEstoque.execute([dt_saida, estoque.quantidade, produtos.id]);
+    if (estoque.quantidade != selectProdutos.first['quantidade']) {
+      DateTime data_At = DateTime.now();
+      String dt_saida = "${data_At.day}/${data_At.month}/${data_At.year}";
+      PreparedStatement queryEstoque = _db.prepare(
+          'UPDATE estoque SET dt_saida=?, quantidade=? WHERE id_produto=?');
+      queryEstoque.execute([dt_saida, estoque.quantidade, produtos.id]);
+      queryEstoque.dispose();
+    }
+    print(estoque.quantidade != selectProdutos.first['quantidade']);
     queryProdutos.dispose();
-    queryEstoque.dispose();
     return result;
   }
 
@@ -81,6 +87,11 @@ class IProdutosRepo {
     PreparedStatement delete = _db.prepare('DELETE FROM produtos WHERE id=?');
     delete.execute([id]);
     final query = _db.getUpdatedRows();
+    if (query != 0) {
+      PreparedStatement deleteEstoque =
+          _db.prepare('DELETE FROM estoque WHERE id_produto=?');
+      deleteEstoque.execute([id]);
+    }
     return query;
   }
 }
