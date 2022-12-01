@@ -39,7 +39,7 @@ class _HomeProdutoState extends State<HomeProduto> {
     mask: '00/00/0000',
   );
   MoneyMaskedTextController controllerUltPreco = MoneyMaskedTextController(
-    leftSymbol: r'R$',
+    leftSymbol: r'R$ ',
     decimalSeparator: ',',
     thousandSeparator: '.',
   );
