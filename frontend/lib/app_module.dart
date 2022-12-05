@@ -6,7 +6,6 @@ import 'app/views/modules/home/home_page_module.dart';
 import 'app/views/modules/home/widgets/sidemenu/side_menu_module.dart';
 import 'app/views/modules/login/login_page_module.dart';
 import 'app/views/modules/produtos/produtos_module.dart';
-import 'app/views/modules/register/register_page_module.dart';
 
 class AppModule extends Module {
   @override
@@ -19,7 +18,6 @@ class AppModule extends Module {
     ModuleRoute('/', module: HomePageModule()),
     ModuleRoute('/home', module: MenuPageModule()),
     ModuleRoute('/produtos', module: ProdutosModule()),
-    ModuleRoute('/register', module: RegisterPageModule()),
     ModuleRoute('/login', module: LoginPageModule()),
     ModuleRoute('/estoque', module: EstoquePageModule()),
     WildcardRoute(

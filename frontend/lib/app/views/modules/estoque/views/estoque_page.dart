@@ -328,10 +328,10 @@ class _EstoquePageState extends State<EstoquePage> {
                     label: Text('Localidade'),
                   ),
                   DataColumn(
-                    label: Text('Saída'),
+                    label: Text('Entrada'),
                   ),
                   DataColumn(
-                    label: Text('Entrada'),
+                    label: Text('Saída'),
                   ),
                   DataColumn(
                     label: Text('Editar'),
@@ -421,8 +421,8 @@ class ExampleSource extends AdvancedDataTableSource<ProdutoModel> {
         ult_preco: 'ult_preco',
         localidade: 'localidade',
         quantidade: 'quantidade',
-        saida: 'saida',
-        entrada: 'entrada');
+        dt_entrada: 'dt_entrada',
+        dt_saida: 'dt_saida',);
 
     lastDetails!.rows[index];
 
@@ -431,8 +431,8 @@ class ExampleSource extends AdvancedDataTableSource<ProdutoModel> {
         DataCell(Text("${lastDetails!.rows[index].nome}")),
         DataCell(Text("${lastDetails!.rows[index].quantidade}")),
         DataCell(Text("${lastDetails!.rows[index].localidade}")),
-        DataCell(Text("${lastDetails!.rows[index].saida}")),
-        DataCell(Text("${lastDetails!.rows[index].entrada}")),
+        DataCell(Text("${lastDetails!.rows[index].dt_entrada}")),
+        DataCell(Text("${lastDetails!.rows[index].dt_saida}")),
         DataCell(
           Row(
             children: [

@@ -22,8 +22,8 @@ class ProdutoRepository implements ProdutoInterface {
       String localidade,
       String dataUltCompra,
       String ultPreco,
-      String entrada,
-      String saida) async {
+      String dt_entrada,
+      String dt_saida) async {
     SharedPreferences _sharedPreferences =
         await SharedPreferences.getInstance();
     bool success = true;
@@ -34,8 +34,8 @@ class ProdutoRepository implements ProdutoInterface {
         localidade: localidade,
         dt_ult_compra: dataUltCompra,
         ult_preco: ultPreco,
-        entrada: entrada,
-        saida: saida);
+        dt_entrada: dt_entrada,
+        dt_saida: dt_saida);
     final apiResponse = await _dio.post(
       'http://localhost:3333/produtos',
       data: produtoModel.toJson(),
@@ -96,15 +96,15 @@ class ProdutoRepository implements ProdutoInterface {
       String localidade,
       String dataUltCompra,
       String ultPreco,
-      String entrada,
-      String saida) async {
+      String dt_entrada,
+      String dt_saida) async {
     bool success = false;
     SharedPreferences _sharedPreferences =
         await SharedPreferences.getInstance();
 
     var tokenCreate = await _sharedPreferences.getString('token');
     var data = ProdutoModel(
-        nome: nome, dt_ult_compra: dataUltCompra, ult_preco: ultPreco);
+        nome: nome, dt_ult_compra: dataUltCompra, ult_preco: ultPreco, quantidade: quantidade, localidade: localidade);
 
     final apiResponse = await _dio.put(
       'http://localhost:3333/produtos/${id}',
